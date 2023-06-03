@@ -7,48 +7,51 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-* { padding: 0; margin: 0; }
-html, body {
-    min-height: 100% !important;
-    height: 100%;
+* {
+  padding: 0;
+  margin: 0;
 }
-
-#root{
+html,
+body {
   min-height: 100% !important;
-    height: 100%;
+  height: 100%;
 }
 
+#root {
+  min-height: 100% !important;
+  height: 100%;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-.primario{
-  background-color: #0A4D68;
+.primario {
+  background-color: #0a4d68;
 }
 
-.secundario{
+.secundario {
   background-color: #088395;
 }
 
-.variante1{
-  background-color: #05BFDB;
+.variante1 {
+  background-color: #05bfdb;
 }
 
-.secundario{
-  background-color: #00FFCA;
+.secundario {
+  background-color: #00ffca;
 }
 
-.shadow{
+.shadow {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
-.activeSitio{
+.activeSitio {
   border-bottom: 3px solid black;
 }
 
-.tipoSitio:hover{
+.tipoSitio:hover {
   border-bottom: 3px solid black;
 }
 
@@ -57,30 +60,64 @@ code {
   height: 48px;
   border-radius: 50%;
   position: relative;
-  animation: rotate 1s linear infinite
+  animation: rotate 1s linear infinite;
 }
-.loader::before , .loader::after {
-  content: "";
+.loader::before,
+.loader::after {
+  content: '';
   box-sizing: border-box;
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: 5px solid #0A4D68;
-  animation: prixClipFix 2s linear infinite ;
+  border: 5px solid #0a4d68;
+  animation: prixClipFix 2s linear infinite;
 }
-.loader::after{
+.loader::after {
   inset: 8px;
-  transform: rotate3d(90, 90, 0, 180deg );
-  border-color: #00FFCA;
+  transform: rotate3d(90, 90, 0, 180deg);
+  border-color: #00ffca;
 }
 
 @keyframes rotate {
-  0%   {transform: rotate(0deg)}
-  100%   {transform: rotate(360deg)}
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes prixClipFix {
-    0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
-    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
-    75%, 100%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+  }
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+  }
+  75%,
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+  }
+}
+
+hr.hr-text {
+  position: relative;
+  border: none;
+  height: 1px;
+  background: #999;
+}
+
+hr.hr-text::before {
+  content: attr(data-content);
+  display: inline-block;
+  background: #fff;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: #999;
+  border-radius: 30rem;
+  padding: 0.2rem 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
