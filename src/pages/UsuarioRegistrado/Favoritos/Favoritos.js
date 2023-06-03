@@ -3,7 +3,7 @@ import { useAuth } from "../../../hooks/useAuth";
 
 const Favoritos = () => {
   const { auth } = useAuth();
-  return <div>Favoritosss{auth.access_token}</div>;
+  return <div>Favoritos</div>;
 };
 
 export default Favoritos;
