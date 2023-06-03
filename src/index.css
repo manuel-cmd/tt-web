@@ -7,7 +7,80 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+* { padding: 0; margin: 0; }
+html, body {
+    min-height: 100% !important;
+    height: 100%;
+}
+
+#root{
+  min-height: 100% !important;
+    height: 100%;
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.primario{
+  background-color: #0A4D68;
+}
+
+.secundario{
+  background-color: #088395;
+}
+
+.variante1{
+  background-color: #05BFDB;
+}
+
+.secundario{
+  background-color: #00FFCA;
+}
+
+.shadow{
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.activeSitio{
+  border-bottom: 3px solid black;
+}
+
+.tipoSitio:hover{
+  border-bottom: 3px solid black;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite
+}
+.loader::before , .loader::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  border: 5px solid #0A4D68;
+  animation: prixClipFix 2s linear infinite ;
+}
+.loader::after{
+  inset: 8px;
+  transform: rotate3d(90, 90, 0, 180deg );
+  border-color: #00FFCA;
+}
+
+@keyframes rotate {
+  0%   {transform: rotate(0deg)}
+  100%   {transform: rotate(360deg)}
+}
+
+@keyframes prixClipFix {
+    0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+    75%, 100%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
 }

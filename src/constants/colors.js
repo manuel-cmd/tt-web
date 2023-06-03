@@ -1,0 +1,6 @@
+export const COLORS = {
+  PRIMARIO: "#0A4D68",
+  SECUNDARIO: "#088395",
+  VARIANTE1: "#05BFDB",
+  VARIANTE2: "#00FFCA",
+};
