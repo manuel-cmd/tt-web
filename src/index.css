@@ -31,20 +31,26 @@ code {
   background-color: #0a4d68;
 }
 
+.btn.primario:hover{
+  background-color: #106e93;
+
+}
+
 .secundario {
   background-color: #088395;
+}
+
+.btn.secundario:hover{
+  background-color: #0ba5bd;
+
 }
 
 .variante1 {
   background-color: #05bfdb;
 }
 
-.secundario {
+.variante2 {
   background-color: #00ffca;
-}
-
-.shadow {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 .activeSitio {
@@ -120,4 +126,9 @@ hr.hr-text::before {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.sitiosGrid::after {
+  content: "";
+  flex: auto;
 }

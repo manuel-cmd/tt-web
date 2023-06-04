@@ -16,6 +16,7 @@ body {
   background: #fff;
   height: 50px;
   width: 100%;
+  border-bottom: 1px solid #e1e1e1;
 }
 
 div ul {
@@ -38,7 +39,7 @@ div ul li a {
 }
 
 .menu ul li a:hover {
-  background-color: #add1ec;
+  background-color: #00ffca;
 }
 
 .checkbtn {

@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../constants/routes'
 import ModalLogin from './ModalLogin'
 import { useAuth } from '../hooks/useAuth'
+import authService from '../services/auth.services'
 
 const Navbar = () => {
   const [modal, setModal] = useState(false)
+  const navigate = useNavigate()
+
   const { auth } = useAuth()
 
   const toggle = () => setModal(!modal)
+
+  const handleLogout = () => {
+    authService.logout()
+    window.location.reload(false);
+  }
 
   return (
     <>
@@ -31,7 +39,7 @@ const Navbar = () => {
                 <a class='active'>Sitios</a>
               </li>
             </Link>
-            {auth?.access_token && (
+            {auth?.access_token ? (
               <>
                 <Link
                   to={`/${ROUTES.FAVORITOS}`}
@@ -57,17 +65,17 @@ const Navbar = () => {
                     <a class='active'>Configuración</a>
                   </li>
                 </Link>
-              </>
-            )}
+                <><li onClick={() => handleLogout()}>
+                  <a class='active'>Logout</a>
+                </li></>
 
-            <li onClick={() => toggle()}>
+              </>
+            ) : (<><li onClick={() => toggle()}>
               <a class='active'>Login</a>
-            </li>
-            <li>
-              <button onClick={''} className='cerrarSesion'>
-                Cerrar Sesion
-              </button>
-            </li>
+            </li></>)}
+
+
+
           </ul>
         </div>
       </div>
