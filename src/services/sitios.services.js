@@ -11,6 +11,16 @@ const getServicios = async () => {
     });
 };
 
-const sitiosService = { getServicios };
+const getServicioById = async (id) => {
+  return axios
+    .get(API + `/mostrar_sitio/${id}`, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const sitiosService = { getServicios, getServicioById };
 
 export default sitiosService;

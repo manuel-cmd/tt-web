@@ -11,13 +11,13 @@ const TIPO_SITIOS = [
     nombre: "Museos",
     imagen: require("../../../assets/Sitios/Museo.png"),
     ruta: "",
-    cveTipoSitio: "",
+    cveTipoSitio: 1,
   },
   {
     nombre: "Teatros",
     imagen: require("../../../assets/Sitios/Teatro.png"),
     ruta: "",
-    cveTipoSitio: "",
+    cveTipoSitio: 2,
   },
   {
     nombre: "Monumentos",
@@ -50,7 +50,7 @@ const Inicio = () => {
   const [activo, setActivo] = useState("Museos");
   const [isLoading, setIsLoading] = useState(false);
   const [listaSitios, setListaSitios] = useState([]);
-  const [sitioClave, setSitioClave] = useState(1);
+  const [sitioClave, setSitioClave] = useState(2);
   const [sitiosFiltrados, setSitiosFiltrados] = useState([]);
 
   useEffect(() => {
@@ -60,7 +60,8 @@ const Inicio = () => {
         const filter = response.filter(
           (sitio) => sitio.cve_tipo_sitio === sitioClave
         );
-        setListaSitios(filter);
+        setSitiosFiltrados(filter);
+        setListaSitios(response);
         console.log(filter);
         setIsLoading(false);
       });
@@ -70,21 +71,31 @@ const Inicio = () => {
     }
   }, []);
 
-  const handleActivo = (activo) => {
-    setIsLoading(true);
-    setActivo(activo);
+  const handleSitioClave = (activo) => {
+    // setIsLoading(true);
+    const filter = listaSitios.filter(
+      (sitio) => sitio.cve_tipo_sitio === activo
+    );
+    setSitiosFiltrados(filter);
+
+    setSitioClave(activo);
   };
 
   const ListaSitios = () => {
     return (
-      <div
-        style={{ width: "100%", marginLeft: "0px", marginRight: "0px" }}
-        className="row justify-content-between sitiosGrid"
-      >
-        {listaSitios.map((sitio) => (
-          <SitioCard nombre={sitio.nombre_sitio} />
+      <div class="row">
+        {sitiosFiltrados.map((sitio) => (
+          <SitioCard sitio={sitio} />
         ))}
       </div>
+      // <div
+      //   style={{ width: "100%", marginLeft: "0px", marginRight: "0px" }}
+      //   className="row justify-content-between sitiosGrid"
+      // >
+      //   {sitiosFiltrados.map((sitio) => (
+      //     <SitioCard sitio={sitio} />
+      //   ))}
+      // </div>
     );
   };
   return (
@@ -99,8 +110,9 @@ const Inicio = () => {
           <TipoSitio
             nombre={sitio.nombre}
             icono={sitio.imagen}
-            active={activo}
-            handleActivo={handleActivo}
+            cve={sitio.cveTipoSitio}
+            active={sitioClave}
+            handleActivo={handleSitioClave}
           />
         ))}
       </div>

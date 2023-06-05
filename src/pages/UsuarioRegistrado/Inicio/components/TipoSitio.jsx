@@ -1,11 +1,11 @@
 import React from "react";
 
-const TipoSitio = ({ nombre, icono, active, handleActivo }) => {
+const TipoSitio = ({ nombre, icono, active, handleActivo, cve }) => {
   return (
     <div
-      onClick={() => handleActivo(nombre)}
+      onClick={() => handleActivo(cve)}
       className={`d-flex flex-column justify-content-center align-items-center tipoSitio ${
-        nombre === active ? "activeSitio" : ""
+        cve === active ? "activeSitio" : ""
       }`}
       style={{ height: "80px", width: "80px", marginInline: "15px" }}
     >
