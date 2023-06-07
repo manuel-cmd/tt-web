@@ -1,86 +1,114 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { ROUTES } from '../constants/routes'
-import ModalLogin from './ModalLogin'
-import { useAuth } from '../hooks/useAuth'
-import authService from '../services/auth.services'
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ROUTES } from "../constants/routes";
+import ModalLogin from "./ModalLogin";
+import { useAuth } from "../hooks/useAuth";
+import authService from "../services/auth.services";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
 
 const Navbar = () => {
-  const [modal, setModal] = useState(false)
-  const navigate = useNavigate()
+  const [modal, setModal] = useState(false);
+  const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const { auth } = useAuth()
+  const toggleDropdown = () => setDropdownOpen((prevState) => !prevState);
 
-  const toggle = () => setModal(!modal)
+  const { auth } = useAuth();
+
+  console.log(auth);
+  const toggle = () => setModal(!modal);
 
   const handleLogout = () => {
-    authService.logout()
+    authService.logout();
     window.location.reload(false);
-  }
+  };
 
   return (
     <>
       <ModalLogin isOpen={modal} toggle={toggle} />
-      <div class='menu'>
-        <label class='checkbtn'>TSULI</label>
-        <div class='opciones'>
+      <div class="menu">
+        <label class="checkbtn">TSULI</label>
+        <div class="opciones">
           <ul>
-            <Link to={`/`} style={{ textDecoration: 'none' }}>
+            <Link to={`/`} style={{ textDecoration: "none" }}>
               <li>
-                <a class='active'>Inicio</a>
+                <a class="active">Inicio</a>
               </li>
             </Link>
-            <Link
-              to={`/${ROUTES.SITIOS}`}
-              state={''}
-              style={{ textDecoration: 'none' }}
-            >
-              <li>
-                <a class='active'>Sitios</a>
-              </li>
-            </Link>
+
             {auth?.access_token ? (
               <>
                 <Link
-                  to={`/${ROUTES.FAVORITOS}`}
-                  style={{ textDecoration: 'none' }}
+                  to={`/${ROUTES.SITIOS}`}
+                  state={""}
+                  style={{ textDecoration: "none" }}
                 >
                   <li>
-                    <a class='active'>Favoritos</a>
+                    <a class="active">Sitios</a>
+                  </li>
+                </Link>
+                <Link
+                  to={`/${ROUTES.FAVORITOS}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <li>
+                    <a class="active">Favoritos</a>
                   </li>
                 </Link>
                 <Link
                   to={`/${ROUTES.RESENAS}`}
-                  style={{ textDecoration: 'none' }}
+                  style={{ textDecoration: "none" }}
                 >
                   <li>
-                    <a class='active'>Reseñas</a>
+                    <a class="active">Reseñas</a>
                   </li>
                 </Link>
-                <Link
-                  to={`/${ROUTES.CONFIFURACION}`}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <li>
-                    <a class='active'>Configuración</a>
-                  </li>
-                </Link>
-                <><li onClick={() => handleLogout()}>
-                  <a class='active'>Logout</a>
-                </li></>
-
+                <li>
+                  <Dropdown
+                    isOpen={dropdownOpen}
+                    toggle={toggleDropdown}
+                    direction={"down"}
+                  >
+                    <DropdownToggle
+                      style={{ backgroundColor: "white", borderColor: "white" }}
+                    >
+                      <img
+                        src={auth.link_imagen}
+                        width="30"
+                        height="30"
+                        class="rounded-circle"
+                      />
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <DropdownItem
+                        onClick={() => navigate(`/${ROUTES.CONFIFURACION}`)}
+                      >
+                        Configuracion
+                      </DropdownItem>
+                      <DropdownItem onClick={() => handleLogout()}>
+                        Logout
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </li>
               </>
-            ) : (<><li onClick={() => toggle()}>
-              <a class='active'>Login</a>
-            </li></>)}
-
-
-
+            ) : (
+              <>
+                <li onClick={() => toggle()}>
+                  <a class="active">Login</a>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

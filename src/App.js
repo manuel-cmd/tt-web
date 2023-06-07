@@ -19,13 +19,15 @@ function App() {
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path={`/${ROUTES.LOGIN}`} element={<Login />} />
-          <Route path={`/${ROUTES.SITIOS}`} element={<Sitios />} />
+          <Route path={`/${ROUTES.SITIOID}/:id`} element={<SitioID />} />
+
           <Route
             path="/*"
             element={
               <RequireAuth>
                 <Routes>
-                  {/* Registrados */}
+                  {/* Registrados */}{" "}
+                  <Route path={`/${ROUTES.SITIOS}`} element={<Sitios />} />
                   <Route
                     path={`/${ROUTES.FAVORITOS}`}
                     element={<Favoritos />}
@@ -34,10 +36,6 @@ function App() {
                   <Route
                     path={`/${ROUTES.CONFIFURACION}`}
                     element={<Configuracion />}
-                  />
-                  <Route
-                    path={`/${ROUTES.SITIOID}/:id`}
-                    element={<SitioID />}
                   />
                 </Routes>
               </RequireAuth>

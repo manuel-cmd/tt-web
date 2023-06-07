@@ -69,10 +69,13 @@ const Sitios = () => {
     {
       name: "Acciones",
       selector: (row) => (
-        <>
+        <div
+          className="d-flex flex-row justify-content-center"
+          style={{ width: "100px" }}
+        >
           <Editar id={row.cve_sitio} />
           <Ver id={row.cve_sitio} />
-        </>
+        </div>
       ),
     },
   ];

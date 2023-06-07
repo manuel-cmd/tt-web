@@ -52,6 +52,11 @@ const Inicio = () => {
   const [listaSitios, setListaSitios] = useState([]);
   const [sitioClave, setSitioClave] = useState(2);
   const [sitiosFiltrados, setSitiosFiltrados] = useState([]);
+  const [listaFavs, setListaFavs] = useState([12, 13, 15, 22, 23]);
+
+  useEffect(() => {
+    console.log("Lista: ", listaFavs);
+  }, [listaFavs]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -72,7 +77,6 @@ const Inicio = () => {
   }, []);
 
   const handleSitioClave = (activo) => {
-    // setIsLoading(true);
     const filter = listaSitios.filter(
       (sitio) => sitio.cve_tipo_sitio === activo
     );
@@ -85,17 +89,13 @@ const Inicio = () => {
     return (
       <div class="row">
         {sitiosFiltrados.map((sitio) => (
-          <SitioCard sitio={sitio} />
+          <SitioCard
+            sitio={sitio}
+            listaFavs={listaFavs}
+            setListaFavs={setListaFavs}
+          />
         ))}
       </div>
-      // <div
-      //   style={{ width: "100%", marginLeft: "0px", marginRight: "0px" }}
-      //   className="row justify-content-between sitiosGrid"
-      // >
-      //   {sitiosFiltrados.map((sitio) => (
-      //     <SitioCard sitio={sitio} />
-      //   ))}
-      // </div>
     );
   };
   return (

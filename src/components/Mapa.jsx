@@ -67,7 +67,7 @@ const Mapa = ({ ubicacion, setUbicacion }) => {
         zoom={17}
         scrollWheelZoom={false}
       >
-        <ChangeView center={ubicacion} zoom={17} />
+        <ChangeView center={coordenadas} zoom={17} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

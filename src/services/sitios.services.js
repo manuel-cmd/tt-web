@@ -1,6 +1,19 @@
 import axios from "axios";
 import { API } from "../api";
 
+const addServicios = async (form) => {
+  return axios
+    .post(API + "/crear_sitio", form, {
+      headers: {
+        "Access-Control-Allow-Origin": true,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
 const getServicios = async () => {
   return axios
     .get(API + "/mostrar_sitios", {
@@ -21,6 +34,6 @@ const getServicioById = async (id) => {
     });
 };
 
-const sitiosService = { getServicios, getServicioById };
+const sitiosService = { getServicios, getServicioById, addServicios };
 
 export default sitiosService;

@@ -6,7 +6,10 @@ import { ROUTES } from "../../../../constants/routes";
 const Ver = ({ id }) => {
   const navigate = useNavigate();
   return (
-    <div onClick={() => navigate(`/${ROUTES.SITIOID}/${id}`)}>
+    <div
+      onClick={() => navigate(`/${ROUTES.SITIOID}/${id}`)}
+      className="bntAccion"
+    >
       <img src={VerIcono} style={{ width: "18px", height: "18px" }} />
     </div>
   );
