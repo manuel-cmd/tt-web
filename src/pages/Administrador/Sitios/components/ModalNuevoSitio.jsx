@@ -8,31 +8,31 @@ import { Mapa } from "../../../../components";
 import sitiosService from "../../../../services/sitios.services";
 
 const TIPO_SITIO = [
-  { value: 0, label: "Museo" },
-  { value: 1, label: "Teatro" },
-  { value: 2, label: "Parque" },
-  { value: 3, label: "Hotel" },
-  { value: 4, label: "Restaurante" },
-  { value: 5, label: "Monumento" },
+  { value: 1, label: "Museo" },
+  { value: 2, label: "Teatro" },
+  { value: 3, label: "Monumento" },
+  { value: 4, label: "Parque" },
+  { value: 5, label: "Hotel" },
+  { value: 6, label: "Restaurante" },
 ];
 
 const DELEGACIONES = [
-  { value: 0, label: "Álvaro Obregón" },
-  { value: 1, label: "Azcapotzalco" },
+  { value: 1, label: "Álvaro Obregón" },
+  { value: 3, label: "Azcapotzalco" },
   { value: 2, label: "Benito Juárez" },
-  { value: 3, label: "Coyoacán" },
-  { value: 4, label: "Cuajimalpa de Morelos" },
-  { value: 5, label: "Cuauhtémoc" },
-  { value: 6, label: "Gustavo A. Madero" },
-  { value: 7, label: "Iztacalco" },
-  { value: 8, label: "Iztapalapa" },
-  { value: 9, label: "Magdalena Contreras" },
-  { value: 10, label: "Miguel Hidalgo" },
-  { value: 11, label: "Milpa Alta" },
-  { value: 12, label: "Tláhuac" },
-  { value: 13, label: "Tlalpan" },
-  { value: 14, label: "Venustiano Carranza" },
-  { value: 15, label: "Xochimilco" },
+  { value: 4, label: "Coyoacán" },
+  { value: 5, label: "Cuajimalpa de Morelos" },
+  { value: 6, label: "Cuauhtémoc" },
+  { value: 7, label: "Gustavo A. Madero" },
+  { value: 8, label: "Iztacalco" },
+  { value: 9, label: "Iztapalapa" },
+  { value: 10, label: "Magdalena Contreras" },
+  { value: 11, label: "Miguel Hidalgo" },
+  { value: 12, label: "Milpa Alta" },
+  { value: 13, label: "Tláhuac" },
+  { value: 14, label: "Tlalpan" },
+  { value: 15, label: "Venustiano Carranza" },
+  { value: 16, label: "Xochimilco" },
 ];
 
 const ETIQUETAS_RESTAURANTE = [
