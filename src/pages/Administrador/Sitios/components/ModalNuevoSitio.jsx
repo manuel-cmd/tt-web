@@ -18,8 +18,8 @@ const TIPO_SITIO = [
 
 const DELEGACIONES = [
   { value: 0, label: "Álvaro Obregón" },
-  { value: 1, label: "Benito Juárez" },
-  { value: 2, label: "Azcapotzalco" },
+  { value: 1, label: "Azcapotzalco" },
+  { value: 2, label: "Benito Juárez" },
   { value: 3, label: "Coyoacán" },
   { value: 4, label: "Cuajimalpa de Morelos" },
   { value: 5, label: "Cuauhtémoc" },
@@ -36,27 +36,35 @@ const DELEGACIONES = [
 ];
 
 const ETIQUETAS_RESTAURANTE = [
-  { value: 1, label: "Chino" },
-  { value: 2, label: "Italiano" },
-  { value: 3, label: "Mexicano" },
-  { value: 4, label: "Japones" },
-  { value: 5, label: "Americano" },
-  { value: 6, label: "Mediterraneo" },
-  { value: 7, label: "Molecular" },
+  { cve_etiqueta: 6, nombre: "Antropología" },
+  { cve_etiqueta: 5, nombre: "Arqueología" },
+  { cve_etiqueta: 2, nombre: "Arte" },
+  { cve_etiqueta: 12, nombre: "Buffet" },
+  { cve_etiqueta: 1, nombre: "Ciencia y tecnología" },
+  { cve_etiqueta: 11, nombre: "Cortes" },
+  { cve_etiqueta: 4, nombre: "Especializado" },
+  { cve_etiqueta: 8, nombre: "Hamburguesas" },
+  { cve_etiqueta: 3, nombre: "Historia" },
+  { cve_etiqueta: 10, nombre: "Mariscos" },
+  { cve_etiqueta: 13, nombre: "Música en vivo" },
+  { cve_etiqueta: 9, nombre: "Pizzas" },
+  { cve_etiqueta: 15, nombre: "Restaurante/Bar" },
+  { cve_etiqueta: 14, nombre: "Románticos" },
+  { cve_etiqueta: 7, nombre: "Tacos" },
 ];
 
 const ETIQUETAS_HOTEL = [
-  { value: 1, label: "SPA" },
-  { value: 2, label: "Sauna" },
-  { value: 3, label: "Comedor" },
-  { value: 4, label: "Alberca" },
-  { value: 5, label: "Desayuno Incluido" },
-  { value: 6, label: "Actividades" },
-  { value: 7, label: "Resort" },
+  { cve_servicio: 1, nombre: "Alberca" },
+  { cve_servicio: 2, nombre: "Estacionamiento" },
+  { cve_servicio: 3, nombre: "Aire acondicionado" },
+  { cve_servicio: 4, nombre: "Televisión por cable" },
+  { cve_servicio: 5, nombre: "Wifi gratis" },
+  { cve_servicio: 6, nombre: "Spa" },
+  { cve_servicio: 7, nombre: "Bar en hotel" },
 ];
 
 const ModalNuevoSitio = ({ isOpen, toggle }) => {
-  const [tipo_sitio, setTipo_sitio] = useState(null);
+  const [tipo_sitio, setTipo_sitio] = useState(1);
   const [correo, setCorreo] = useState("");
   const [nombre_sitio, setNombre] = useState(null);
   const [direccion, setDireccion] = useState("");
@@ -78,7 +86,7 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
   const [horarioViernesC, setHorarioViernesC] = useState("0");
   const [horarioSabadoC, setHorarioSabadoC] = useState("0");
   const [horarioDomingoC, setHorarioDomingoC] = useState("0");
-  const [delegacion, setDelegacion] = useState(null);
+  const [delegacion, setDelegacion] = useState(1);
   const [colonia, setColonia] = useState([]);
   const [fecha_actualizacion, setFecha_actualizacion] = useState("");
   const [fecha_fundacion, setFecha_fundacion] = useState();
