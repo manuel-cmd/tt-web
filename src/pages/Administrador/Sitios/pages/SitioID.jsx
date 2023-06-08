@@ -108,8 +108,7 @@ const SitioID = () => {
               <div className="col-xl-6">
                 <div className="sidebar">
                   <div className="panel panel-success">
-                    <div className="panel-heading">Recent Posts</div>
-                    <CarruselImagenes />
+                    <CarruselImagenes imagenes={sitio.fotos} />
                   </div>
                 </div>
               </div>{" "}

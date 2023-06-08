@@ -146,7 +146,7 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
       formData.append("cve_delegacion", delegacion.value);
       formData.append("colonia", colonia);
       formData.append("etiquetas", JSON.stringify(etiquetas));
-      formData.append("horarios", null);
+      formData.append("horarios", JSON.stringify(horarios));
       formData.append("fotos_sitio", foto_sitio);
 
       const response = await sitiosService.addServicios(formData);

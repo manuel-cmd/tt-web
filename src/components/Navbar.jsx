@@ -43,31 +43,39 @@ const Navbar = () => {
 
             {auth?.access_token ? (
               <>
-                <Link
-                  to={`/${ROUTES.SITIOS}`}
-                  state={""}
-                  style={{ textDecoration: "none" }}
-                >
-                  <li>
-                    <a class="active">Sitios</a>
-                  </li>
-                </Link>
-                <Link
-                  to={`/${ROUTES.FAVORITOS}`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <li>
-                    <a class="active">Favoritos</a>
-                  </li>
-                </Link>
-                <Link
-                  to={`/${ROUTES.RESENAS}`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <li>
-                    <a class="active">Reseñas</a>
-                  </li>
-                </Link>
+                {auth.tipo_usuario === "Administrador" ? (
+                  <>
+                    <Link
+                      to={`/${ROUTES.SITIOS}`}
+                      state={""}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <li>
+                        <a class="active">Sitios</a>
+                      </li>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to={`/${ROUTES.FAVORITOS}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <li>
+                        <a class="active">Favoritos</a>
+                      </li>
+                    </Link>
+                    <Link
+                      to={`/${ROUTES.RESENAS}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <li>
+                        <a class="active">Reseñas</a>
+                      </li>
+                    </Link>
+                  </>
+                )}
+
                 <li>
                   <Dropdown
                     isOpen={dropdownOpen}

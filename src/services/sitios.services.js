@@ -34,6 +34,57 @@ const getServicioById = async (id) => {
     });
 };
 
-const sitiosService = { getServicios, getServicioById, addServicios };
+const removeServicios = async (cve_sitio) => {
+  return axios
+    .post(API + "/eliminar_sitio", cve_sitio, {
+      headers: {
+        "Access-Control-Allow-Origin": true,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const disableServicios = async (cve_sitio) => {
+  return axios
+    .post(API + "/inhabilitar_sitio", cve_sitio, {
+      headers: {
+        "Access-Control-Allow-Origin": true,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const addToFavoritos = async (cve_sitio, token) => {
+  return axios
+    .post(
+      API + "/agregar_sitio_favorito",
+      { cve_sitio },
+      {
+        headers: {
+          "Access-Control-Allow-Origin": true,
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const sitiosService = {
+  getServicios,
+  getServicioById,
+  addServicios,
+  removeServicios,
+  disableServicios,
+  addToFavoritos,
+};
 
 export default sitiosService;

@@ -328,3 +328,8 @@ footer
 .bntAccion:hover{
   background-color: rgb(208, 208, 208);
 }
+
+.thumbs-wrapper.axis-vertical{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}

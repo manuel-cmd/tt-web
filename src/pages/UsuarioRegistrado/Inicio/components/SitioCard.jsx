@@ -1,23 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "reactstrap";
 import noImagen from "../../../../assets/Sitios/no-imagen.jpg";
 import { useNavigate } from "react-router-dom";
 import Heart from "react-animated-heart";
 import { useAuth } from "../../../../hooks/useAuth";
+import sitiosService from "../../../../services/sitios.services";
 
 const SitioCard = ({ sitio, listaFavs, setListaFavs }) => {
   const [isClick, setClick] = useState(listaFavs.includes(sitio.cve_sitio));
   const { auth } = useAuth();
 
-  const handleFav = (cve) => {
-    if (listaFavs.includes(cve)) {
-      const myArray = [...listaFavs];
-      const newArray = myArray.filter((item) => item != cve);
-      console.log("Nuevo:", newArray);
-      setListaFavs(newArray);
-    } else {
-      setListaFavs([...listaFavs, cve]);
-    }
+  useEffect(() => {
+    console.log(sitio);
+  }, []);
+
+  const handleFav = async (cve) => {
+    const nuevosFav = await sitiosService.addToFavoritos(
+      cve,
+      auth.access_token
+    );
+    console.log("Nuevos Favoritos: ", nuevosFav);
   };
   const navigate = useNavigate();
   return (
@@ -27,7 +29,11 @@ const SitioCard = ({ sitio, listaFavs, setListaFavs }) => {
           <div>
             <img
               class="card-img-top"
-              src={sitio?.imagenes?.lenght > 0 ? sitio.imagen[1] : noImagen}
+              src={
+                sitio?.imagenes?.length > 0
+                  ? sitio.imagenes[0].link_imagen
+                  : noImagen
+              }
               alt="Card image cap"
             />
             {auth.access_token && (
