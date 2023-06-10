@@ -1,4 +1,5 @@
 import React from "react";
+import ReactStars from "react-rating-stars-component";
 
 import noImagen from "../../../../assets/Sitios/no-imagen.jpg";
 import { useAuth } from "../../../../hooks/useAuth";
@@ -6,19 +7,40 @@ import { useState } from "react";
 //import ModalNuevoSitio from "../../../Administrador/Sitios/components/ModalNuevoSitio";
 import ModalEditarResena from "./ModalEditarResena";
 
-const ResenaCard = ({ sitio, listaFavs, setListaFavs }) => {
+import "./resenaCard.css";
+
+const ResenaCard = ({ sitio }) => {
   const { auth } = useAuth();
 
   const [isLoading, setIsLoading] = useState(true);
   const [listaSitios, setListaSitios] = useState([]);
   const [modalNuevoSitio, setModalNuevoSitio] = useState(false);
+  const [resenaTemp, setResenaTemp] = useState("");
+  const [calificacion, setCalificacion] = useState("0");
+  const [imagenes, setImagenes] = useState([]);
 
   const toggle = () => setModalNuevoSitio(!modalNuevoSitio);
+
+  const editarResena = (resena, calificacion, imagenes) => {
+    console.log("la resena es: ", resena, calificacion, imagenes);
+    // setNuevaResena(resena);
+    toggle();
+  };
 
   return (
     <>
       <div class=" mx-auto col-10 col-md-8 col-lg-8">
-        <ModalEditarResena toggle={toggle} isOpen={modalNuevoSitio} />
+        <ModalEditarResena
+          toggle={toggle}
+          isOpen={modalNuevoSitio}
+          resena={resenaTemp}
+          setResena={setResenaTemp}
+          calificacion={calificacion}
+          setCalificacion={setCalificacion}
+          imagenes={imagenes}
+          setImagenes={setImagenes}
+          editarResena={editarResena}
+        />
 
         <div class="">
           <div>
@@ -29,8 +51,21 @@ const ResenaCard = ({ sitio, listaFavs, setListaFavs }) => {
             )}
           </div>
 
-          <div class="">
+          <div class="form-group row">
             <h4 class="card-title">{"Tacos"}</h4>
+            <div className="estrellitas2">
+              <ReactStars
+                count={5}
+                value={5}
+                edit={false}
+                size={20}
+                activeColor="#ffd700"
+                isHalf={true}
+                emptyIcon={<i className="far fa-star"></i>}
+                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                fullIcon={<i className="fa fa-star"></i>}
+              />
+            </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-5">

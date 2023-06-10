@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+
 import sitiosService from "../../../../services/sitios.services";
 import {
   CarruselImagenes,
@@ -12,16 +15,22 @@ import { useAuth } from "../../../../hooks/useAuth";
 import ModalResena from "../components/ModalResena";
 import Heart from "react-animated-heart";
 
+import usuariosService from "../../../../services/usuario.services";
+
 const SitioID = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sitio, setSitio] = useState({});
   const [modalResena, setModalResena] = useState(false);
   const [nuevaResena, setNuevaResena] = useState("");
   const [resenaTemp, setResenaTemp] = useState("");
+  const [calificacion, setCalificacion] = useState("");
+  const [imagenes, setImagenes] = useState([]);
+
   const [isClick, setClick] = useState(false);
 
   const { id } = useParams();
   const { auth } = useAuth();
+  const { setAuth } = useAuth();
 
   const toggle = () => setModalResena(!modalResena);
 
@@ -51,9 +60,33 @@ const SitioID = () => {
     );
   };
 
-  const enviarResena = (resena) => {
+  const enviarResena = async (resena, calificacion, imagenes) => {
+    console.log("la resena es: ", resena, calificacion, imagenes);
     setNuevaResena(resena);
-    toggle();
+
+    try {
+      const formData = new FormData();
+      formData.append("cve_sitio", id);
+      formData.append("correo", auth?.correo_usuario);
+      formData.append("comentario", resena);
+      formData.append("calificacion", calificacion);
+      formData.append("imagenes", imagenes);
+
+      const response = await usuariosService.addResena(formData);
+      console.log("response: ", response);
+      //const { access_token, foto, tipo_usuario, usuario } = response;
+      //const rol = response?.user?.rol
+      //setAuth({ access_token, foto, tipo_usuario, usuario });
+
+      toggle();
+    } catch (err) {
+      console.log(err);
+      toast.error(
+        err.code === "ERR_BAD_RESPONSE"
+          ? err.message
+          : err?.response?.data?.error
+      );
+    }
   };
 
   /*const handleFav = (cve) => {
@@ -92,6 +125,7 @@ const SitioID = () => {
   };
   return (
     <>
+      <Toaster />
       {isLoading ? (
         <Loader />
       ) : (
@@ -101,6 +135,10 @@ const SitioID = () => {
             toggle={toggle}
             resena={resenaTemp}
             setResena={setResenaTemp}
+            calificacion={calificacion}
+            setCalificacion={setCalificacion}
+            imagenes={imagenes}
+            setImagenes={setImagenes}
             enviarResena={enviarResena}
           />
           <div className="container blog-detail-section">

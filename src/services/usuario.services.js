@@ -53,11 +53,20 @@ const addResena = async (form) => {
       headers: {
         "Access-Control-Allow-Origin": true,
         "Content-Type": "multipart/form-data",
+        //Authorization: "Bearer " + access_token,
       },
     })
     .then((response) => {
       return response.data;
     });
+  /*const res = await fetch(`${API}/crear_comentario`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+
+    body: JSON.stringify({}),
+  });*/
 };
 
 const editResena = async (form) => {

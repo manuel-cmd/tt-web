@@ -36,21 +36,21 @@ const DELEGACIONES = [
 ];
 
 const ETIQUETAS_RESTAURANTE = [
-  { cve_etiqueta: 6, nombre: "Antropología" },
-  { cve_etiqueta: 5, nombre: "Arqueología" },
-  { cve_etiqueta: 2, nombre: "Arte" },
-  { cve_etiqueta: 12, nombre: "Buffet" },
-  { cve_etiqueta: 1, nombre: "Ciencia y tecnología" },
-  { cve_etiqueta: 11, nombre: "Cortes" },
-  { cve_etiqueta: 4, nombre: "Especializado" },
-  { cve_etiqueta: 8, nombre: "Hamburguesas" },
-  { cve_etiqueta: 3, nombre: "Historia" },
-  { cve_etiqueta: 10, nombre: "Mariscos" },
-  { cve_etiqueta: 13, nombre: "Música en vivo" },
-  { cve_etiqueta: 9, nombre: "Pizzas" },
-  { cve_etiqueta: 15, nombre: "Restaurante/Bar" },
-  { cve_etiqueta: 14, nombre: "Románticos" },
-  { cve_etiqueta: 7, nombre: "Tacos" },
+  { value: 6, label: "Antropología" },
+  { value: 5, label: "Arqueología" },
+  { value: 2, label: "Arte" },
+  { value: 12, label: "Buffet" },
+  { value: 1, label: "Ciencia y tecnología" },
+  { value: 11, label: "Cortes" },
+  { value: 4, label: "Especializado" },
+  { value: 8, label: "Hamburguesas" },
+  { value: 3, label: "Historia" },
+  { value: 10, label: "Mariscos" },
+  { value: 13, label: "Música en vivo" },
+  { value: 9, label: "Pizzas" },
+  { value: 15, label: "Restaurante/Bar" },
+  { value: 14, label: "Románticos" },
+  { value: 7, label: "Tacos" },
 ];
 
 const ETIQUETAS_HOTEL = [
@@ -130,8 +130,6 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
     );
 
     try {
-      console.log("lat: ", ubicacion.lat);
-      console.log("lng: ", ubicacion.lng);
       const formData = new FormData();
       formData.append("nombre_sitio", nombre_sitio);
       formData.append("latitud", ubicacion.lat);
@@ -141,12 +139,13 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
       formData.append("costo", costo_promedio);
       formData.append("pagina_web", pagina_web);
       formData.append("telefono", telefono);
+      formData.append("direccion", direccion);
       formData.append("adscripcion", adscripcion);
       formData.append("cve_tipo_sitio", tipo_sitio.value);
       formData.append("cve_delegacion", delegacion.value);
       formData.append("colonia", colonia);
       formData.append("etiquetas", JSON.stringify(etiquetas));
-      formData.append("horarios", JSON.stringify(horarios));
+      //formData.append("horarios", JSON.stringify(horarios));
       formData.append("fotos_sitio", foto_sitio);
 
       const response = await sitiosService.addServicios(formData);
@@ -292,6 +291,18 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
                   id="inputCorreo"
                   value={correo}
                   onChange={(e) => setCorreo(e.target.value)}
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="inputPaginaWeb">Direccion completa</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputPaginaWeb"
+                  value={direccion}
+                  onChange={(e) => setDireccion(e.target.value)}
                 />
               </div>
             </div>

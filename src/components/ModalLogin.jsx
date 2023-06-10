@@ -5,6 +5,44 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import authService from "../services/auth.services";
+import Select from "react-select";
+
+const ETIQUETAS_RESTAURANTE = [
+  { value: 6, label: "Antropología" },
+  { value: 5, label: "Arqueología" },
+  { value: 2, label: "Arte" },
+  { value: 12, label: "Buffet" },
+  { value: 1, label: "Ciencia y tecnología" },
+  { value: 11, label: "Cortes" },
+  { value: 4, label: "Especializado" },
+  { value: 8, label: "Hamburguesas" },
+  { value: 3, label: "Historia" },
+  { value: 10, label: "Mariscos" },
+  { value: 13, label: "Música en vivo" },
+  { value: 9, label: "Pizzas" },
+  { value: 15, label: "Restaurante/Bar" },
+  { value: 14, label: "Románticos" },
+  { value: 7, label: "Tacos" },
+];
+
+const ETIQUETAS_HOTEL = [
+  { value: 1, label: "Alberca" },
+  { value: 2, label: "Estacionamiento" },
+  { value: 3, label: "Aire acondicionado" },
+  { value: 4, label: "Televisión por cable" },
+  { value: 5, label: "Wifi gratis" },
+  { value: 6, label: "Spa" },
+  { value: 7, label: "Bar en hotel" },
+];
+
+const TIPO_SITIO = [
+  { value: 1, label: "Museo" },
+  { value: 2, label: "Teatro" },
+  { value: 3, label: "Monumento" },
+  { value: 4, label: "Parque" },
+  { value: 5, label: "Hotel" },
+  { value: 6, label: "Restaurante" },
+];
 
 const ModalLogin = ({ isOpen, toggle }) => {
   const [correo, setCorreo] = useState("");
@@ -13,7 +51,9 @@ const ModalLogin = ({ isOpen, toggle }) => {
   const [isSending, setIsSending] = useState(false);
 
   const [registro, setRegistro] = useState(false);
-
+  const [etiquetasRestaurante, setEtiquetasRestaurante] = useState([]);
+  const [etiquetasHotel, setEtiquetasHotel] = useState([]);
+  const [tipo_sitio, setTipo_sitio] = useState([]);
   const { setAuth } = useAuth();
   const navigate = useNavigate();
 
@@ -61,6 +101,12 @@ const ModalLogin = ({ isOpen, toggle }) => {
   // nombreusuario
   // contrasena
 
+  function sitioExists(value) {
+    return tipo_sitio.some(function (el) {
+      return el.value === value;
+    });
+  }
+
   return (
     <>
       <Toaster />
@@ -102,6 +148,59 @@ const ModalLogin = ({ isOpen, toggle }) => {
                   id="password"
                 />
               </div>
+              <div class="form-group last mb-3">
+                Tipo de sitio de interes:
+                <div class="form-group">
+                  <Select
+                    id="inputEtiquetas"
+                    options={TIPO_SITIO}
+                    value={tipo_sitio}
+                    defaultValue={tipo_sitio}
+                    onChange={setTipo_sitio}
+                    placeholder="Seleccione una o mas etiquetas..."
+                    noOptionsMessage={() => "Etiqueta no encontrada"}
+                    isMulti
+                  />
+                  {console.log("tipo sitio: ", tipo_sitio)}
+                </div>
+              </div>
+              {tipo_sitio[0] != null && (
+                <div class="form-group last mb-3">
+                  {sitioExists(5) && (
+                    <div class="form-group">
+                      Seleccione las etiquetas de su preferencia:
+                      <Select
+                        id="inputEtiquetas"
+                        options={ETIQUETAS_HOTEL}
+                        value={etiquetasHotel}
+                        defaultValue={etiquetasHotel}
+                        onChange={setEtiquetasHotel}
+                        placeholder="Seleccione una o mas etiquetas..."
+                        noOptionsMessage={() => "Etiqueta no encontrada"}
+                        isMulti
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+              {tipo_sitio[0] != null && (
+                <div class="form-group last mb-3">
+                  {sitioExists(6) && (
+                    <div class="form-group ">
+                      Seleccione las etiquetas de su preferencia:
+                      <Select
+                        id="inputEtiquetas"
+                        options={ETIQUETAS_RESTAURANTE}
+                        value={etiquetasRestaurante}
+                        defaultValue={etiquetasRestaurante}
+                        onChange={setEtiquetasRestaurante}
+                        placeholder="Seleccione una o mas etiquetas..."
+                        isMulti
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
               <button
                 type="button"
                 onClick={(e) => handleSubmit(e)}

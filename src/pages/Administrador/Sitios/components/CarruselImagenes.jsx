@@ -8,7 +8,7 @@ const CarruselImagenes = ({ imagenes }) => {
       <Carousel>
         {imagenes?.map((imagen) => (
           <div>
-            <img src={imagen?.link_imagen} />
+            <img src={imagen?.link_imagen}></img>
             {/* <p className="legend">Legend 1</p> */}
           </div>
         ))}
