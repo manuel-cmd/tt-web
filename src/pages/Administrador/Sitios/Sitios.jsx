@@ -6,6 +6,7 @@ import { COLORS } from "../../../constants/colors";
 import Editar from "./components/Editar";
 import ModalNuevoSitio from "./components/ModalNuevoSitio";
 import Ver from "./components/Ver";
+import Eliminar from "./components/Eliminar";
 
 const Sitios = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -73,8 +74,9 @@ const Sitios = () => {
           className="d-flex flex-row justify-content-center"
           style={{ width: "100px" }}
         >
-          <Editar id={row.cve_sitio} />
+          <Editar id={row.cve_sitio} sitio={row} />
           <Ver id={row.cve_sitio} />
+          <Eliminar id={row.cve_sitio} />
         </div>
       ),
     },

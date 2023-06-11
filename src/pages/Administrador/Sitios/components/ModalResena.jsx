@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useFetcher, useNavigate } from "react-router-dom";
+import ReactStars from "react-rating-stars-component";
 import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import Select from "react-select";
@@ -36,18 +37,30 @@ const ModalResena = ({
     URL.revokeObjectURL(image);
   }
 
+  const ratingChanged = (newRating) => {
+    console.log(newRating);
+    setCalificacion(newRating);
+  };
+
   return (
     <>
       <Toaster />
       <Modal isOpen={isOpen} toggle={toggle} scrollable>
         <ModalHeader toggle={toggle}>
           Reseña{" "}
-          <input
-            type="text"
-            value={calificacion}
-            onChange={(e) => setCalificacion(e.target.value)}
-            placeholder="Calificacion"
-          />
+          <div className="estrellitas2">
+            <ReactStars
+              count={5}
+              value={calificacion}
+              size={20}
+              activeColor="#ffd700"
+              onChange={ratingChanged}
+              isHalf={true}
+              emptyIcon={<i className="far fa-star"></i>}
+              halfIcon={<i className="fa fa-star-half-alt"></i>}
+              fullIcon={<i className="fa fa-star"></i>}
+            />
+          </div>
         </ModalHeader>
         <ModalBody>
           <div className="form-group ">
