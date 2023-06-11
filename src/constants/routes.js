@@ -1,9 +1,10 @@
 export const ROUTES = {
   LOGIN: "login",
-  INICIO: "inicio",
+  INICIO: "/",
   SITIOS: "sitios",
   SITIOID: "sitio",
   FAVORITOS: "favoritos",
+  HISTORIAL: "historial",
   RESENAS: "resenas",
   CONFIFURACION: "configuracion",
 };

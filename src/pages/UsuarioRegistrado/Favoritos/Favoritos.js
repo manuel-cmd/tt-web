@@ -1,11 +1,11 @@
 import React from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { useEffect, useState } from "react";
-import SitioCard from "../Inicio/components/SitioCard";
+import SitioCard from "./components/SitioCard";
 import { Container, Row } from "reactstrap";
 import TipoSitio from "../Inicio/components/TipoSitio";
 import { Loader } from "../../../components";
-import usuariosService from "../../../services/usuario.services";
+import sitiosService from "../../../services/sitios.services";
 
 const TIPO_SITIOS = [
   {
@@ -51,25 +51,17 @@ const Favoritos = () => {
   const [activo, setActivo] = useState("Museos");
   const [isLoading, setIsLoading] = useState(false);
   const [listaSitios, setListaSitios] = useState([]);
-  const [sitioClave, setSitioClave] = useState(2);
+  const [sitioClave, setSitioClave] = useState(1);
   const [sitiosFiltrados, setSitiosFiltrados] = useState([]);
-  const [listaFavs, setListaFavs] = useState([12, 13, 15, 22, 23]);
-  const access_token = auth?.access_token;
-
-  useEffect(() => {
-    console.log("Lista: ", listaFavs);
-  }, [listaFavs]);
+  const [listaFavs, setListaFavs] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
     try {
-      usuariosService.getFavoritos(access_token).then((response) => {
-        const filter = response.filter(
-          (sitio) => sitio.cve_tipo_sitio === sitioClave
-        );
-        setSitiosFiltrados(filter);
-        setListaSitios(response);
-        console.log(filter);
+      sitiosService.getFavoritos(auth.correo_usuario).then((response) => {
+        
+        setListaSitios(response)
+    setSitiosFiltrados(response);
         setIsLoading(false);
       });
     } catch (error) {
@@ -77,6 +69,16 @@ const Favoritos = () => {
       setIsLoading(false);
     }
   }, []);
+
+  useEffect(()=>{
+    let filter = []
+    listaSitios.forEach((sitio) => {
+      if(listaFavs.includes(sitio.cve_sitio)){
+filter.push(sitio)
+      }
+    })
+    setSitiosFiltrados(filter);
+  },[listaFavs])
 
   const handleSitioClave = (activo) => {
     const filter = listaSitios.filter(
@@ -93,8 +95,7 @@ const Favoritos = () => {
         {sitiosFiltrados.map((sitio) => (
           <SitioCard
             sitio={sitio}
-            listaFavs={listaFavs}
-            setListaFavs={setListaFavs}
+            setFavs={setListaFavs}
           />
         ))}
       </div>

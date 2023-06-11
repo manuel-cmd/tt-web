@@ -25,7 +25,7 @@ const SitioID = () => {
   const [resenaTemp, setResenaTemp] = useState("");
   const [calificacion, setCalificacion] = useState("");
   const [imagenes, setImagenes] = useState([]);
-
+  const [isSending, setIsSending] = useState(false);
   const [isClick, setClick] = useState(false);
 
   const { id } = useParams();
@@ -104,6 +104,21 @@ const SitioID = () => {
     setClick(!isClick);
   };
 
+  const addVisita = async (cve) => {
+    try {
+      setIsSending(true);
+      const response = await sitiosService.addToHistorial(
+        cve,
+        auth.correo_usuario
+      );
+      toast.success(response.mensaje);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setIsSending(false);
+  };
+
   const ListaResenas = () => {
     return (
       <div className="row">
@@ -147,6 +162,26 @@ const SitioID = () => {
                 <div className="sidebar">
                   <div className="panel panel-success">
                     <CarruselImagenes imagenes={sitio.fotos} />
+                    {auth.correo_usuario && (
+                      <>
+                        <button
+                          disabled={isSending}
+                          onClick={() => addVisita(sitio.cve_sitio)}
+                          className="btn btn-primary primario btn-block"
+                          style={{ height: "50px" }}
+                        >
+                          {isSending ? (
+                            <span
+                              class="spinner-border spinner-border-sm"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                          ) : (
+                            <>Registar Visita</>
+                          )}
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>{" "}

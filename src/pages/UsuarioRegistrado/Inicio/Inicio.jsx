@@ -62,16 +62,31 @@ const Inicio = () => {
   useEffect(() => {
     setIsLoading(true);
     try {
-      sitiosService.getServicios().then((response) => {
-        const filter = response.filter(
-          (sitio) => sitio.cve_tipo_sitio === sitioClave
-        );
-        setSitiosFiltrados(filter);
-        setListaSitios(response);
-        console.log(filter);
-        setIsLoading(false);
-      });
+      sitiosService
+        .getServicios()
+        .then((response) => {
+          const filter = response.filter(
+            (sitio) => sitio.cve_tipo_sitio === sitioClave
+          );
+          setSitiosFiltrados(filter);
+          setListaSitios(response);
+          console.log(filter);
+        })
+        .then(() => {
+          if (auth?.correo_usuario) {
+            sitiosService.getFavoritos(auth.correo_usuario).then((response) => {
+              setListaFavs(
+                response.map((sitio) => {
+                  return sitio.cve_sitio;
+                })
+              );
+              setIsLoading(false);
+            });
+          }
+        });
       console.log("los sitios son: ", listaSitios);
+      setIsLoading(false);
+
     } catch (error) {
       console.log(error);
       setIsLoading(false);

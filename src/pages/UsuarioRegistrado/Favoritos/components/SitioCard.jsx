@@ -6,8 +6,8 @@ import Heart from "react-animated-heart";
 import { useAuth } from "../../../../hooks/useAuth";
 import sitiosService from "../../../../services/sitios.services";
 
-const SitioCard = ({ sitio, listaFavs, setListaFavs }) => {
-  const [isClick, setClick] = useState(listaFavs.includes(sitio.cve_sitio));
+const SitioCard = ({ sitio, setFavs }) => {
+  const [isClick, setClick] = useState();
   const { auth } = useAuth();
 
   const handleFav = async (cve) => {
@@ -16,7 +16,8 @@ const SitioCard = ({ sitio, listaFavs, setListaFavs }) => {
         cve,
         auth.correo_usuario
       );
-      setListaFavs(nuevosFav.sitios_favoritos)
+      console.log("Nuevos Fav",nuevosFav)
+      setFavs(nuevosFav.sitios_favoritos)
     } catch (error) {
       console.log(error)
     }
@@ -42,7 +43,7 @@ const SitioCard = ({ sitio, listaFavs, setListaFavs }) => {
                 style={{ position: "absolute", top: "-10px", right: "-10px" }}
               >
                 <Heart
-                  isClick={isClick}
+                  isClick={true}
                   onClick={() => handleFav(sitio.cve_sitio)}
                 />
               </div>

@@ -1,13 +1,13 @@
 import axios from "axios";
 import { API } from "../api";
 
-const login = async (correo, contrasena) => {
+const login = async (correo_usuario, contrasena) => {
   console.log("entre");
   return axios
     .post(
       API + "/login",
       {
-        correo,
+        correo_usuario,
         contrasena,
       },
       { headers: { "Content-Type": "application/json" } }

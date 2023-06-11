@@ -1,13 +1,11 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import { ROUTES } from "./constants/routes";
-
-import Favoritos from "./pages/UsuarioRegistrado/Favoritos/Favoritos";
+import { ROUTES } from "./constants/routes";  
 import Resenas from "./pages/UsuarioRegistrado/Resenas/Resenas";
 import Configuracion from "./pages/UsuarioRegistrado/Configuracion/Configuracion";
 import { Navbar, RequireAuth } from "./components";
 import { Container } from "reactstrap";
-import { Inicio } from "./pages/UsuarioRegistrado";
+import { Inicio, Historial, Favoritos } from "./pages/UsuarioRegistrado";
 import { Login } from "./pages/UsuarioNoRegistrado";
 import { SitioID, Sitios } from "./pages/Administrador";
 
@@ -28,6 +26,10 @@ function App() {
                 <Routes>
                   {/* Registrados */}{" "}
                   <Route path={`/${ROUTES.SITIOS}`} element={<Sitios />} />
+                  <Route
+                    path={`/${ROUTES.HISTORIAL}`}
+                    element={<Historial/>}
+                  />
                   <Route
                     path={`/${ROUTES.FAVORITOS}`}
                     element={<Favoritos />}

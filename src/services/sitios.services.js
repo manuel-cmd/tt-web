@@ -60,23 +60,56 @@ const disableServicios = async (cve_sitio) => {
     });
 };
 
-const addToFavoritos = async (cve_sitio, token) => {
+const addToFavoritos = async (cve_sitio, correo_usuario) => {
+  console.log("JSON", ({ correo_usuario,cve_sitio}))
   return axios
     .post(
       API + "/agregar_sitio_favorito",
-      { cve_sitio },
+      ({ correo_usuario,cve_sitio}),
       {
-        headers: {
-          "Access-Control-Allow-Origin": true,
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json" }
       }
     )
     .then((response) => {
       return response.data;
     });
 };
+
+const getFavoritos = async (correo_usuario) => {
+  return axios
+    .get(API + `/mostrar_favoritos/${correo_usuario}`, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const addToHistorial = async (cve_sitio, correo_usuario) => {
+  return axios
+    .post(
+      API + "/agregar_historial",
+      ({ correo_usuario,cve_sitio}),
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const getHistorial = async (correo_usuario) => {
+  return axios
+    .get(API + `/mostrar_historial/${correo_usuario}`, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+
 
 const sitiosService = {
   getServicios,
@@ -85,6 +118,7 @@ const sitiosService = {
   removeServicios,
   disableServicios,
   addToFavoritos,
+  getFavoritos, addToHistorial,getHistorial
 };
 
 export default sitiosService;
