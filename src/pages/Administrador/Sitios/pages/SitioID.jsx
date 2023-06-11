@@ -127,12 +127,15 @@ const SitioID = () => {
         ) : (
           <div className="container d-flex flex-column justify-content-center align-items-center">
             <p>No hay reseñas para este sitio :(</p>
-            {auth.access_token && (
-              <>
-                <p>Se el primero y agrega una reseña</p>
-                <AgregarReseña />
-              </>
-            )}
+            {
+              //auth.access_token && (
+              auth.correo_usuario && (
+                <>
+                  <p>Se el primero y agrega una reseña</p>
+                  <AgregarReseña />
+                </>
+              )
+            }
           </div>
         )}
       </div>
@@ -207,7 +210,7 @@ const SitioID = () => {
                         <p>
                           <strong>Ubicacion</strong>
                         </p>
-                        {auth.access_token && (
+                        {auth.correo_usuario && (
                           <div
                             style={{
                               position: "absolute",
