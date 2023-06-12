@@ -36,11 +36,21 @@ const SitioID = () => {
 
   useEffect(() => {
     try {
-      sitiosService.getServicioById(id).then((response) => {
-        setIsLoading(false);
-        console.log(response);
-        setSitio(response);
-      });
+
+      if(auth.correo_usuario){
+        sitiosService.getServicioById(id,auth.correo_usuario).then((response) => {
+          setIsLoading(false);
+          console.log("SitioID",response);
+          setSitio(response);
+        });
+      }else{
+        sitiosService.getServicioById(id).then((response) => {
+          setIsLoading(false);
+          console.log("SitioID",response);
+          setSitio(response);
+        });
+      }
+      
     } catch (error) {
       console.log(error);
     }
@@ -88,17 +98,6 @@ const SitioID = () => {
     }
   };
 
-  /*const handleFav = (cve) => {
-    if (listaFavs.includes(cve)) {
-      const myArray = [...listaFavs];
-      const newArray = myArray.filter((item) => item != cve);
-      console.log("Nuevo:", newArray);
-      setListaFavs(newArray);
-    } else {
-      setListaFavs([...listaFavs, cve]);
-    }
-  };*/
-
   const addFavoritos = (e) => {
     setClick(!isClick);
   };
@@ -110,6 +109,8 @@ const SitioID = () => {
         cve,
         auth.correo_usuario
       );
+      console.log(response)
+      setSitio(response.datos_sitio)
       toast.success(response.mensaje);
     } catch (error) {
       console.log(error);
@@ -126,15 +127,12 @@ const SitioID = () => {
         ) : (
           <div className="container d-flex flex-column justify-content-center align-items-center">
             <p>No hay reseñas para este sitio :(</p>
-            {
-              //auth.access_token && (
-              auth.correo_usuario && (
-                <>
-                  <p>Se el primero y agrega una reseña</p>
-                  <AgregarReseña />
-                </>
-              )
-            }
+            {sitio.visitado && (
+              <>
+                <p>Se el primero y agrega una reseña</p>
+                <AgregarReseña />
+              </>
+            )}
           </div>
         )}
       </div>
@@ -169,7 +167,7 @@ const SitioID = () => {
                         <button
                           disabled={isSending}
                           onClick={() => addVisita(sitio.cve_sitio)}
-                          className="btn btn-primary primario btn-block"
+                          className={`btn btn-${sitio.visitado ? "danger" : "primary primario" } btn-block`}
                           style={{ height: "50px" }}
                         >
                           {isSending ? (
@@ -179,7 +177,9 @@ const SitioID = () => {
                               aria-hidden="true"
                             ></span>
                           ) : (
-                            <>Registar Visita</>
+                            <>
+                            {sitio.visitado ? "Quitar Visita" : "Registra Visita"}
+                            </>
                           )}
                         </button>
                       </>
@@ -209,22 +209,6 @@ const SitioID = () => {
                         <p>
                           <strong>Ubicacion</strong>
                         </p>
-                        {auth.correo_usuario && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "-10px",
-                              right: "-10px",
-                            }}
-                          >
-                            <br />
-                            <br />
-                            <Heart
-                              isClick={isClick}
-                              onClick={() => setClick(!isClick)}
-                            />
-                          </div>
-                        )}
                         <div className="row">
                           <MapaInformativo
                             lat={sitio.latitud}
