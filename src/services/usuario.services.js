@@ -37,9 +37,9 @@ const addFavoritos = async (form) => {
     });
 };
 
-const getResenas = async (access_token) => {
+const getResenas = async (correo_usuario) => {
   return axios
-    .get(API + `/mostrar_resenas/${access_token}`, {
+    .get(API + `/mostrar_resenas/${correo_usuario}`, {
       headers: { "Content-Type": "application/json" },
     })
     .then((response) => {
@@ -53,7 +53,6 @@ const addResena = async (form) => {
       headers: {
         "Access-Control-Allow-Origin": true,
         "Content-Type": "multipart/form-data",
-        //Authorization: "Bearer " + access_token,
       },
     })
     .then((response) => {

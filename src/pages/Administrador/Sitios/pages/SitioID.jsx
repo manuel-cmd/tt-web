@@ -77,10 +77,10 @@ const SitioID = () => {
     try {
       const formData = new FormData();
       formData.append("cve_sitio", id);
-      formData.append("correo", auth?.correo_usuario);
+      formData.append("correo_usuario", auth?.correo_usuario);
       formData.append("comentario", resena);
       formData.append("calificacion", calificacion);
-      formData.append("imagenes", imagenes);
+      formData.append("fotos_sitio", imagenes);
 
       const response = await usuariosService.addResena(formData);
       console.log("response: ", response);
