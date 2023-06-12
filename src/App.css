@@ -38,7 +38,7 @@ div ul li a {
   text-transform: uppercase;
 }
 
-.menu ul li a:hover {
+.menu ul li a:hover, .menu ul li a.active {
   background-color: #00ffca;
 }
 

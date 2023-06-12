@@ -24,9 +24,9 @@ const getServicios = async () => {
     });
 };
 
-const getServicioById = async (id) => {
+const getServicioById = async (id, correo_usuario) => {
   return axios
-    .get(API + `/mostrar_sitio/${id}`, {
+    .get(API + `/mostrar_sitio/${id}${correo_usuario ? "?correo_usuario="+correo_usuario : ""}`, {
       headers: { "Content-Type": "application/json" },
     })
     .then((response) => {

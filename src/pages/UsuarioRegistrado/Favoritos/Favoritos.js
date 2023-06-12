@@ -108,7 +108,7 @@ filter.push(sitio)
 
       <div
         className="row justify-content-center"
-        style={{ marginTop: "15px", width: "100%" }}
+        style={{ marginTop: "15px",marginBottom:"15px", width: "100%" }}
       >
         {TIPO_SITIOS.map((sitio) => (
           <TipoSitio
