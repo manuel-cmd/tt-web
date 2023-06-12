@@ -151,7 +151,7 @@ const Inicio = () => {
             handleActivo={handleSitioClave}
           />
         ))}
-        <div className="mostrarSitio">
+        {auth.cve_tipo_usuario === 1 && <div className="mostrarSitio">
           {sitiosMostrar === "todos" ? (
             <button
               className="btn btn-primary primario"
@@ -176,7 +176,8 @@ const Inicio = () => {
               Mostrar todos
             </button>
           )}
-        </div>
+        </div>}
+        
       </div>
 
       {isLoading ? (
