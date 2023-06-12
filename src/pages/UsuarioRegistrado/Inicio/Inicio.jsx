@@ -49,10 +49,13 @@ const Inicio = () => {
   const { auth } = useAuth();
   const [activo, setActivo] = useState("Museos");
   const [isLoading, setIsLoading] = useState(false);
+  const [recomendadosLoading, setRecomendadosLoading] = useState(false)
   const [listaSitios, setListaSitios] = useState([]);
   const [sitioClave, setSitioClave] = useState(1);
   const [sitiosFiltrados, setSitiosFiltrados] = useState([]);
   const [listaFavs, setListaFavs] = useState([]);
+  const [sitiosRecomendados, setSitiosRecomendados] = useState([]);
+  const [sitiosMostrar, setSitiosMostar] = useState("todos");
 
   useEffect(() => {
     auth.access_token && console.log("Esta loggeado");
@@ -101,6 +104,23 @@ const Inicio = () => {
     setSitioClave(activo);
   };
 
+  const getRecomendaciones = async () => {
+    setRecomendadosLoading(true)
+    const recomendaciones = await sitiosService.getRecomendaciones(
+      auth.correo_usuario
+    );
+    setSitiosRecomendados(recomendaciones);
+    setSitiosMostar("recomendacion");
+    console.log(recomendaciones);
+    setRecomendadosLoading(false)
+  };
+
+  useEffect(() => {
+    setSitiosFiltrados(
+      sitiosMostrar === "todos" ? listaSitios : sitiosRecomendados
+    );
+  }, [sitiosMostrar]);
+
   const ListaSitios = () => {
     return (
       <div class="row">
@@ -120,7 +140,7 @@ const Inicio = () => {
 
       <div
         className="row justify-content-center"
-        style={{ marginTop: "15px",marginBottom:"15px", width: "100%" }}
+        style={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
       >
         {TIPO_SITIOS.map((sitio) => (
           <TipoSitio
@@ -131,6 +151,32 @@ const Inicio = () => {
             handleActivo={handleSitioClave}
           />
         ))}
+        <div className="mostrarSitio">
+          {sitiosMostrar === "todos" ? (
+            <button
+              className="btn btn-primary primario"
+              onClick={() => getRecomendaciones()}
+              disabled={recomendadosLoading}
+            >
+              {recomendadosLoading ? (
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                ) : (
+                  <>Mostrar Recomendados</>
+                )}
+            </button>
+          ) : (
+            <button
+              className="btn btn-primary primario"
+              onClick={() => setSitiosMostar("todos")}
+            >
+              Mostrar todos
+            </button>
+          )}
+        </div>
       </div>
 
       {isLoading ? (

@@ -36,21 +36,21 @@ const SitioID = () => {
 
   useEffect(() => {
     try {
-
-      if(auth.correo_usuario){
-        sitiosService.getServicioById(id,auth.correo_usuario).then((response) => {
-          setIsLoading(false);
-          console.log("SitioID",response);
-          setSitio(response);
-        });
-      }else{
+      if (auth.correo_usuario) {
+        sitiosService
+          .getServicioById(id, auth.correo_usuario)
+          .then((response) => {
+            setIsLoading(false);
+            console.log("SitioID", response);
+            setSitio(response);
+          });
+      } else {
         sitiosService.getServicioById(id).then((response) => {
           setIsLoading(false);
-          console.log("SitioID",response);
+          console.log("SitioID", response);
           setSitio(response);
         });
       }
-      
     } catch (error) {
       console.log(error);
     }
@@ -110,8 +110,8 @@ const SitioID = () => {
         cve,
         auth.correo_usuario
       );
-      console.log(response)
-      setSitio(response.datos_sitio)
+      console.log(response);
+      setSitio(response.datos_sitio);
       toast.success(response.mensaje);
     } catch (error) {
       console.log(error);
@@ -168,7 +168,9 @@ const SitioID = () => {
                         <button
                           disabled={isSending}
                           onClick={() => addVisita(sitio.cve_sitio)}
-                          className={`btn btn-${sitio.visitado ? "danger" : "primary primario" } btn-block`}
+                          className={`btn btn-${
+                            sitio.visitado ? "danger" : "primary primario"
+                          } btn-block`}
                           style={{ height: "50px" }}
                         >
                           {isSending ? (
@@ -179,7 +181,9 @@ const SitioID = () => {
                             ></span>
                           ) : (
                             <>
-                            {sitio.visitado ? "Quitar Visita" : "Registra Visita"}
+                              {sitio.visitado
+                                ? "Quitar Visita"
+                                : "Registra Visita"}
                             </>
                           )}
                         </button>
@@ -193,14 +197,18 @@ const SitioID = () => {
                   <div className="card">
                     <div className="card-body">
                       <div className=" d-flex flex-row justify-content-between">
-                        <h5 className="card-title">{sitio.nombre_sitio}</h5>
-                        <ReactStars
-                          count={5}
-                          value={5}
-                          edit={false}
-                          size={20}
-                          activeColor="#ffd700"
-                        />
+                        <div style={{ flex: 1 }}>
+                          <h5 className="card-title">{sitio.nombre_sitio}</h5>
+                        </div>
+                        <div style={{ flex: 1 ,display:"flex",justifyContent:"flex-end"}}>
+                          <ReactStars
+                            count={5}
+                            value={5}
+                            edit={false}
+                            size={20}
+                            activeColor="#ffd700"
+                          />
+                        </div>
                       </div>
 
                       <div className="content">

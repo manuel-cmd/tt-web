@@ -26,9 +26,15 @@ const getServicios = async () => {
 
 const getServicioById = async (id, correo_usuario) => {
   return axios
-    .get(API + `/mostrar_sitio/${id}${correo_usuario ? "?correo_usuario="+correo_usuario : ""}`, {
-      headers: { "Content-Type": "application/json" },
-    })
+    .get(
+      API +
+        `/mostrar_sitio/${id}${
+          correo_usuario ? "?correo_usuario=" + correo_usuario : ""
+        }`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    )
     .then((response) => {
       return response.data;
     });
@@ -61,13 +67,13 @@ const disableServicios = async (cve_sitio) => {
 };
 
 const addToFavoritos = async (cve_sitio, correo_usuario) => {
-  console.log("JSON", ({ correo_usuario,cve_sitio}))
+  console.log("JSON", { correo_usuario, cve_sitio });
   return axios
     .post(
       API + "/agregar_sitio_favorito",
-      ({ correo_usuario,cve_sitio}),
+      { correo_usuario, cve_sitio },
       {
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       }
     )
     .then((response) => {
@@ -89,9 +95,9 @@ const addToHistorial = async (cve_sitio, correo_usuario) => {
   return axios
     .post(
       API + "/agregar_historial",
-      ({ correo_usuario,cve_sitio}),
+      { correo_usuario, cve_sitio },
       {
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       }
     )
     .then((response) => {
@@ -109,7 +115,15 @@ const getHistorial = async (correo_usuario) => {
     });
 };
 
-
+const getRecomendaciones = async (correo_usuario) => {
+  return axios
+    .get(API + `/mostrar_recomendaciones/${correo_usuario}`, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
 
 const sitiosService = {
   getServicios,
@@ -118,7 +132,10 @@ const sitiosService = {
   removeServicios,
   disableServicios,
   addToFavoritos,
-  getFavoritos, addToHistorial,getHistorial
+  getFavoritos,
+  addToHistorial,
+  getHistorial,
+  getRecomendaciones,
 };
 
 export default sitiosService;
