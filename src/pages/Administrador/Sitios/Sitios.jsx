@@ -7,13 +7,17 @@ import Editar from "./components/Editar";
 import ModalNuevoSitio from "./components/ModalNuevoSitio";
 import Ver from "./components/Ver";
 import Eliminar from "./components/Eliminar";
+import ModalEditarSitio from "./components/ModalEditarSitio";
 
 const Sitios = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [listaSitios, setListaSitios] = useState([]);
   const [modalNuevoSitio, setModalNuevoSitio] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [sitioEditar, setSitioEditar] = useState({});
 
   const toggle = () => setModalNuevoSitio(!modalNuevoSitio);
+  const toggleEditar = () => setModalEditar(!modalEditar);
 
   useEffect(() => {
     try {
@@ -74,7 +78,7 @@ const Sitios = () => {
           className="d-flex flex-row justify-content-center"
           style={{ width: "100px" }}
         >
-          <Editar id={row.cve_sitio} sitio={row} />
+          <Editar sitioEditar={row} handleModalEditar={handleModalEditar} />
           <Ver id={row.cve_sitio} />
           <Eliminar id={row.cve_sitio} />
         </div>
@@ -82,9 +86,19 @@ const Sitios = () => {
     },
   ];
 
+  const handleModalEditar = (sitio) => {
+    setSitioEditar(sitio);
+    toggleEditar();
+  };
+
   return (
     <div className="container">
       <ModalNuevoSitio toggle={toggle} isOpen={modalNuevoSitio} />
+      <ModalEditarSitio
+        sitio={sitioEditar}
+        toggle={toggleEditar}
+        isOpen={modalEditar}
+      />
       <div className="d-flex flex-row justify-content-between w-100">
         <h1>Listado de Sitios</h1>
         <button

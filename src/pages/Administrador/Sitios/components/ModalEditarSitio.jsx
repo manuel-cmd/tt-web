@@ -66,27 +66,22 @@ const ETIQUETAS_HOTEL = [
 const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
   console.log("a ver, el sitio es: ", sitio);
   const [tipo_sitio, setTipo_sitio] = useState(1);
-  const [correo, setCorreo] = useState("");
-  const [nombre_sitio, setNombre] = useState(null);
-  const [direccion, setDireccion] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [pagina_web, setPaginaWeb] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [delegacion, setDelegacion] = useState(1);
-  const [colonia, setColonia] = useState([]);
-  const [fecha_actualizacion, setFecha_actualizacion] = useState("");
-  const [fecha_fundacion, setFecha_fundacion] = useState();
-  const [fecha_fundacion2, setFecha_fundacion2] = useState();
-  const [costo_promedio, setCostoPromedio] = useState("");
-  const [adscripcion, setAdscripcion] = useState("");
-  const [etiquetas, setEtiquetas] = useState([]);
-  const [servicios, setServicios] = useState([]);
+  const [correo, setCorreo] = useState();
+  const [nombre_sitio, setNombre] = useState("");
+  const [direccion, setDireccion] = useState();
+  const [telefono, setTelefono] = useState();
+  const [pagina_web, setPaginaWeb] = useState();
+  const [descripcion, setDescripcion] = useState();
+  const [delegacion, setDelegacion] = useState();
+  const [colonia, setColonia] = useState();
+  const [costo_promedio, setCostoPromedio] = useState();
+  const [adscripcion, setAdscripcion] = useState();
+  const [etiquetas, setEtiquetas] = useState();
   const [fotografiasC, setFotografias] = useState("");
   const [ubicacion, setUbicacion] = useState({
     lat: 19.4324454,
     lng: -99.1330281,
   });
-  const [datos, setDatos] = useState(null);
   const [foto_sitio, setFoto_sitio] = useState(null);
   let horario = [];
   const [isSending, setIsSending] = useState(false);
@@ -98,25 +93,35 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
   };
 
   useEffect(() => {
-    console.log(ubicacion);
-  }, [ubicacion]);
+    setNombre(sitio.nombre_sitio);
+    setTipo_sitio(sitio.tipo_sitio);
+    setCorreo(sitio.correo);
+    setNombre("");
+    setDireccion(sitio.direccion);
+    setTelefono(sitio.telefono);
+    setPaginaWeb(sitio.pagina_web);
+    setDescripcion(sitio.descripcion);
+    setDelegacion(sitio.delegacion);
+    setColonia(sitio.colonia);
+    setCostoPromedio(sitio.costo_promedio);
+    setAdscripcion(sitio.adscripcion);
+    setEtiquetas(sitio.etiquetas);
+    setFotografias("");
+    setUbicacion({
+      lat: 19.4324454,
+      lng: -99.1330281,
+    });
+    setFoto_sitio(null);
+    setIsSending(false);
+  }, [sitio]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSending(true);
 
-    /*setHorarios(
-      { dia: 1, horaEntrada: horarioLunesA, horaSalida: horarioLunesC },
-      { dia: 2, horaEntrada: horarioMartesA, horaSalida: horarioMartesC },
-      { dia: 3, horaEntrada: horarioMiercolesA, horaSalida: horarioMiercolesC },
-      { dia: 4, horaEntrada: horarioJuevesA, horaSalida: horarioJuevesC },
-      { dia: 5, horaEntrada: horarioViernesA, horaSalida: horarioViernesC },
-      { dia: 6, horaEntrada: horarioSabadoA, horaSalida: horarioSabadoC },
-      { dia: 7, horaEntrada: horarioDomingoA, horaSalida: horarioDomingoC }
-    );*/
-
     try {
       const formData = new FormData();
+
       formData.append("nombre_sitio", nombre_sitio);
       formData.append("latitud", ubicacion.lat);
       formData.append("longitud", ubicacion.lng);
@@ -134,7 +139,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
       //formData.append("horarios", JSON.stringify(horarios));
       formData.append("fotos_sitio", foto_sitio);
 
-      const response = await sitiosService.addServicios(formData);
+      const response = await sitiosService.editServicios(formData);
       console.log(response);
       //const rol = response?.user?.rol
       setIsSending(false);
@@ -143,22 +148,12 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
     } catch (err) {
       setIsSending(false);
       console.log(err);
-      if (tipo_sitio != null && delegacion != null && nombre_sitio != null) {
-        toast.error(
-          err.code === "ERR_BAD_RESPONSE"
-            ? err.message
-            : err?.response?.data?.error
-        );
-      }
-      if (tipo_sitio == null) {
-        toast.error("Falta seleccionar el tipo de sitio");
-      }
-      if (delegacion == null) {
-        toast.error("Falta seleccionar la delegacion");
-      }
-      if (nombre_sitio == null) {
-        toast.error("Falta ingresar el nombre del sitio");
-      }
+
+      toast.error(
+        err.code === "ERR_BAD_RESPONSE"
+          ? err.message
+          : err?.response?.data?.error
+      );
     }
   };
 
@@ -189,7 +184,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                   value={tipo_sitio}
                   defaultValue={tipo_sitio}
                   onChange={handleTipoSitio}
-                  placeholder="Seleccione un tipo de sitio..."
+                  placeholder={tipo_sitio}
                   noOptionsMessage={() => "Tipo de sitio no encontrado"}
                 />
               </div>
@@ -203,7 +198,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                     value={etiquetas}
                     defaultValue={etiquetas}
                     onChange={setEtiquetas}
-                    placeholder="Seleccione una o mas etiquetas..."
+                    placeholder={etiquetas}
                     noOptionsMessage={() => "Etiqueta no encontrada"}
                     isMulti
                   />
@@ -218,7 +213,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                     value={etiquetas}
                     defaultValue={etiquetas}
                     onChange={setEtiquetas}
-                    placeholder="Seleccione una o mas etiquetas..."
+                    placeholder={etiquetas}
                     isMulti
                   />
                 </div>
@@ -226,14 +221,13 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
             </div>
             <div class="form-row">
               <div class="form-group col-md-4">
-                <label for="inputDelegacion">Delegacion</label>
+                <label for="inputDelegacionEditar">Delegacion</label>
                 <Select
-                  id="inputDelegacion"
+                  id="inputDelegacionEditar"
                   options={DELEGACIONES}
                   value={delegacion}
                   defaultValue={delegacion}
                   onChange={setDelegacion}
-                  placeholder="Seleccione una delegacion..."
                 />
               </div>
               <div class="form-group col-md-4">
@@ -242,7 +236,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                   type="text"
                   class="form-control"
                   id="inputColonia"
-                  placeholder="Colonia"
+                  placeholder={colonia}
                   value={colonia}
                   onChange={(e) => setColonia(e.target.value)}
                 />
@@ -253,7 +247,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                   type="text"
                   class="form-control"
                   id="inputTelefono"
-                  placeholder="Telefono"
+                  placeholder={telefono}
                   value={telefono}
                   onChange={(e) => setTelefono(e.target.value)}
                 />
@@ -267,6 +261,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                   class="form-control"
                   id="inputPaginaWeb"
                   value={pagina_web}
+                  placeholder={pagina_web}
                   onChange={(e) => setPaginaWeb(e.target.value)}
                 />
               </div>
@@ -276,6 +271,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                   type="text"
                   class="form-control"
                   id="inputCorreo"
+                  placeholder={correo}
                   value={correo}
                   onChange={(e) => setCorreo(e.target.value)}
                 />
@@ -289,6 +285,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                   class="form-control"
                   id="inputPaginaWeb"
                   value={direccion}
+                  placeholder={direccion}
                   onChange={(e) => setDireccion(e.target.value)}
                 />
               </div>
@@ -300,7 +297,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                   type="text"
                   class="form-control"
                   id="inputDescripcion"
-                  placeholder="Descripcion"
+                  placeholder={descripcion}
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}
                 />
@@ -311,6 +308,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                   type="text"
                   class="form-control"
                   id="inputCosto"
+                  placeholder={costo_promedio}
                   value={costo_promedio}
                   onChange={(e) => setCostoPromedio(e.target.value)}
                 />
@@ -321,6 +319,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
                   type="text"
                   class="form-control"
                   id="inputAdscripcion"
+                  placeholder={adscripcion}
                   value={adscripcion}
                   onChange={(e) => setAdscripcion(e.target.value)}
                 />
@@ -352,7 +351,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
             class="btn primario btn-block"
             style={{ color: "white", height: "50px" }}
           >
-            Registar
+            Actualizar
           </button>
         </ModalFooter>
       </Modal>

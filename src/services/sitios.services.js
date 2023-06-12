@@ -14,6 +14,19 @@ const addServicios = async (form) => {
     });
 };
 
+const editServicios = async (form) => {
+  return axios
+    .post(API + "/editar_sitio", form, {
+      headers: {
+        "Access-Control-Allow-Origin": true,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
 const getServicios = async () => {
   return axios
     .get(API + "/mostrar_sitios", {
@@ -129,6 +142,7 @@ const sitiosService = {
   getServicios,
   getServicioById,
   addServicios,
+  editServicios,
   removeServicios,
   disableServicios,
   addToFavoritos,

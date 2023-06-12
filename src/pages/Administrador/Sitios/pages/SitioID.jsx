@@ -87,7 +87,6 @@ const SitioID = () => {
       //const { access_token, foto, tipo_usuario, usuario } = response;
       //const rol = response?.user?.rol
       //setAuth({ access_token, foto, tipo_usuario, usuario });
-
       toggle();
     } catch (err) {
       console.log(err);
