@@ -39,7 +39,7 @@ const addFavoritos = async (form) => {
 
 const getResenas = async (correo_usuario) => {
   return axios
-    .get(API + `/mostrar_resenas/${correo_usuario}`, {
+    .get(API + `/mostrar_reseñas/${correo_usuario}`, {
       headers: { "Content-Type": "application/json" },
     })
     .then((response) => {
@@ -91,6 +91,19 @@ const getRecomendaciones = async (access_token) => {
     });
 };
 
+const editCuenta = async (form) => {
+  return axios
+    .post(API + "/modificar_cuenta", form, {
+      headers: {
+        "Access-Control-Allow-Origin": true,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
 const usuariosService = {
   favoritos,
   getFavoritos,
@@ -99,6 +112,7 @@ const usuariosService = {
   addResena,
   editResena,
   getRecomendaciones,
+  editCuenta,
 };
 
 export default usuariosService;

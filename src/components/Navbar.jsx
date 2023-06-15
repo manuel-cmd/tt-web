@@ -15,7 +15,7 @@ const Navbar = () => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [current,setCurrent] = useState(ROUTES.INICIO)
+  const [current, setCurrent] = useState(ROUTES.INICIO);
 
   const toggleDropdown = () => setDropdownOpen((prevState) => !prevState);
 
@@ -36,9 +36,15 @@ const Navbar = () => {
         <label class="checkbtn">TSULI</label>
         <div class="opciones">
           <ul>
-            <Link to={`/`} style={{ textDecoration: "none" }} onClick={()=>setCurrent(ROUTES.INICIO)}>
+            <Link
+              to={`/`}
+              style={{ textDecoration: "none" }}
+              onClick={() => setCurrent(ROUTES.INICIO)}
+            >
               <li>
-                <a class={`${current=== ROUTES.INICIO ? "active":"" }`}>Inicio</a>
+                <a class={`${current === ROUTES.INICIO ? "active" : ""}`}>
+                  Inicio
+                </a>
               </li>
             </Link>
 
@@ -50,40 +56,62 @@ const Navbar = () => {
                       to={`/${ROUTES.SITIOS}`}
                       state={""}
                       style={{ textDecoration: "none" }}
-                      onClick={()=>setCurrent(ROUTES.INICIO)}
+                      onClick={() => setCurrent(ROUTES.INICIO)}
                     >
                       <li>
-                        <a class={`${current=== ROUTES.SITIOS ? "active":"" }`}>Sitios</a>
+                        <a
+                          class={`${current === ROUTES.SITIOS ? "active" : ""}`}
+                        >
+                          Sitios
+                        </a>
                       </li>
                     </Link>
                   </>
                 ) : (
                   <>
-                  <Link
+                    <Link
                       to={`/${ROUTES.HISTORIAL}`}
                       style={{ textDecoration: "none" }}
-                      onClick={()=>setCurrent(ROUTES.HISTORIAL)}
+                      onClick={() => setCurrent(ROUTES.HISTORIAL)}
                     >
                       <li>
-                        <a class={`${current=== ROUTES.HISTORIAL ? "active":"" }`}>Historial</a>
+                        <a
+                          class={`${
+                            current === ROUTES.HISTORIAL ? "active" : ""
+                          }`}
+                        >
+                          Historial
+                        </a>
                       </li>
                     </Link>
                     <Link
                       to={`/${ROUTES.FAVORITOS}`}
                       style={{ textDecoration: "none" }}
-                      onClick={()=>setCurrent(ROUTES.FAVORITOS)}
+                      onClick={() => setCurrent(ROUTES.FAVORITOS)}
                     >
                       <li>
-                        <a class={`${current=== ROUTES.FAVORITOS ? "active":"" }`}>Favoritos</a>
+                        <a
+                          class={`${
+                            current === ROUTES.FAVORITOS ? "active" : ""
+                          }`}
+                        >
+                          Favoritos
+                        </a>
                       </li>
                     </Link>
                     <Link
                       to={`/${ROUTES.RESENAS}`}
                       style={{ textDecoration: "none" }}
-                      onClick={()=>setCurrent(ROUTES.RESENAS)}
+                      onClick={() => setCurrent(ROUTES.RESENAS)}
                     >
                       <li>
-                        <a class={`${current=== ROUTES.RESENAS ? "active":"" }`}>Reseñas</a>
+                        <a
+                          class={`${
+                            current === ROUTES.RESENAS ? "active" : ""
+                          }`}
+                        >
+                          Reseñas
+                        </a>
                       </li>
                     </Link>
                   </>

@@ -8,6 +8,7 @@ import { useState } from "react";
 import ModalEditarResena from "./ModalEditarResena";
 
 import "./resenaCard.css";
+import { CarruselImagenes } from "../../../../components";
 
 const ResenaCard = ({ sitio }) => {
   const { auth } = useAuth();
@@ -52,11 +53,12 @@ const ResenaCard = ({ sitio }) => {
           </div>
 
           <div class="form-group row">
-            <h4 class="card-title">{"Tacos"}</h4>
+            <h4 class="card-title">{sitio.nombre}</h4>
             <div className="estrellitas2">
+              Fecha: 12/01/23
               <ReactStars
                 count={5}
-                value={5}
+                value={sitio.calificacion}
                 edit={false}
                 size={20}
                 activeColor="#ffd700"
@@ -69,18 +71,24 @@ const ResenaCard = ({ sitio }) => {
           </div>
           <div class="form-row">
             <div class="form-group col-md-5">
+              {/*
               <img
                 class="card-img-top"
                 src={sitio?.imagenes?.lenght > 0 ? sitio.imagen[1] : noImagen}
                 alt="Card image cap"
-              />
+            />*/}
+              {sitio.fotos == undefined ? (
+                <div>
+                  <img class="card-img-top" src={noImagen}></img>
+                  {console.log("caso 1")}
+                </div>
+              ) : (
+                <CarruselImagenes imagenes={sitio.fotos} />
+              )}
             </div>
             <div class="form-group col-md-7">
               <div class="">
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
+                <p class="card-text">{sitio.comentario}</p>
               </div>
               <br />
               <div class="" className="mx-auto col-10 col-md-8 col-lg-8">

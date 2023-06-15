@@ -28,6 +28,8 @@ const SitioID = () => {
   const [isSending, setIsSending] = useState(false);
   const [isClick, setClick] = useState(false);
 
+  const [resenas, setResenas] = useState([]);
+
   const { id } = useParams();
   const { auth } = useAuth();
   const { setAuth } = useAuth();
@@ -44,6 +46,12 @@ const SitioID = () => {
             console.log("SitioID", response);
             setSitio(response);
           });
+        //consegirResenas();
+        sitiosService.getResenas(auth.correo_usuario).then((response) => {
+          //setIsLoading(false);
+          console.log("resenas", response);
+          setResenas(response);
+        });
       } else {
         sitiosService.getServicioById(id).then((response) => {
           setIsLoading(false);
@@ -70,9 +78,17 @@ const SitioID = () => {
     );
   };
 
+  const consegirResenas = () => {
+    console.log("deberia enviar la peticion");
+    sitiosService.getServicioById(id, auth.correo_usuario).then((response) => {
+      setIsLoading(false);
+      console.log("SitioID", response);
+      setResenas(response);
+    });
+  };
+
   const enviarResena = async (resena, calificacion, imagenes) => {
     console.log("la resena es: ", resena, calificacion, imagenes);
-    setNuevaResena(resena);
 
     try {
       const formData = new FormData();
@@ -87,6 +103,7 @@ const SitioID = () => {
       //const { access_token, foto, tipo_usuario, usuario } = response;
       //const rol = response?.user?.rol
       //setAuth({ access_token, foto, tipo_usuario, usuario });
+      setNuevaResena(response);
       toggle();
     } catch (err) {
       console.log(err);
@@ -119,12 +136,13 @@ const SitioID = () => {
     setIsSending(false);
   };
 
+  //useEffect(() => {}, [resenaTemp, calificacion, imagenes]);
+
   const ListaResenas = () => {
     return (
       <div className="row">
-        {sitio.comentarios.length > 0 ? (
-          <Resena />
-        ) : (
+        {resenas.length > 0 && <Resena comentarios={resenas} />}
+        {resenas.length == 0 && (
           <div className="container d-flex flex-column justify-content-center align-items-center">
             <p>No hay reseñas para este sitio :(</p>
             {sitio.visitado && (
@@ -199,7 +217,13 @@ const SitioID = () => {
                         <div style={{ flex: 1 }}>
                           <h5 className="card-title">{sitio.nombre_sitio}</h5>
                         </div>
-                        <div style={{ flex: 1 ,display:"flex",justifyContent:"flex-end"}}>
+                        <div
+                          style={{
+                            flex: 1,
+                            display: "flex",
+                            justifyContent: "flex-end",
+                          }}
+                        >
                           <ReactStars
                             count={5}
                             value={5}
@@ -211,8 +235,16 @@ const SitioID = () => {
                       </div>
 
                       <div className="content">
+                        <div className="precio">
+                          <p>
+                            <strong>Telefono</strong> {sitio.telefono}
+                          </p>
+                          <p className="">
+                            <strong>Precio</strong> {"$12.00"}
+                          </p>
+                        </div>
                         <p>
-                          <strong>Telefono</strong> {sitio.telefono}
+                          <strong>Direccion</strong> {sitio.direccion}
                         </p>
                         <p>
                           <strong>Ubicacion</strong>

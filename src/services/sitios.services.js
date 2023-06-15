@@ -37,6 +37,16 @@ const getServicios = async () => {
     });
 };
 
+const getResenas = async (correo_usuario) => {
+  return axios
+    .get(API + `/mostrar_reseñas/${correo_usuario}`, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
 const getServicioById = async (id, correo_usuario) => {
   return axios
     .get(
@@ -143,6 +153,7 @@ const sitiosService = {
   getServicioById,
   addServicios,
   editServicios,
+  getResenas,
   removeServicios,
   disableServicios,
   addToFavoritos,

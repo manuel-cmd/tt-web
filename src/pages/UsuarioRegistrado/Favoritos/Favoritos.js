@@ -59,9 +59,9 @@ const Favoritos = () => {
     setIsLoading(true);
     try {
       sitiosService.getFavoritos(auth.correo_usuario).then((response) => {
-        
-        setListaSitios(response)
-    setSitiosFiltrados(response);
+        console.log("response: ", response);
+        setListaSitios(response);
+        setSitiosFiltrados(response);
         setIsLoading(false);
       });
     } catch (error) {
@@ -70,15 +70,15 @@ const Favoritos = () => {
     }
   }, []);
 
-  useEffect(()=>{
-    let filter = []
+  useEffect(() => {
+    let filter = [];
     listaSitios.forEach((sitio) => {
-      if(listaFavs.includes(sitio.cve_sitio)){
-filter.push(sitio)
+      if (listaFavs.includes(sitio.cve_sitio)) {
+        filter.push(sitio);
       }
-    })
+    });
     setSitiosFiltrados(filter);
-  },[listaFavs])
+  }, [listaFavs]);
 
   const handleSitioClave = (activo) => {
     const filter = listaSitios.filter(
@@ -93,10 +93,7 @@ filter.push(sitio)
     return (
       <div class="row">
         {sitiosFiltrados.map((sitio) => (
-          <SitioCard
-            sitio={sitio}
-            setFavs={setListaFavs}
-          />
+          <SitioCard sitio={sitio} setFavs={setListaFavs} />
         ))}
       </div>
     );
@@ -108,7 +105,7 @@ filter.push(sitio)
 
       <div
         className="row justify-content-center"
-        style={{ marginTop: "15px",marginBottom:"15px", width: "100%" }}
+        style={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
       >
         {TIPO_SITIOS.map((sitio) => (
           <TipoSitio

@@ -4,7 +4,18 @@
 }
 
 .estrellitas2{
+    display: flex;
     position: absolute;
     right: 10px;
     top: 10px;
+    width: 220px;    
+    justify-content: space-between;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+}
+
+.precio{
+    display: flex;
+    justify-content: space-between;
 }

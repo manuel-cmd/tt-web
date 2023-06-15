@@ -70,18 +70,42 @@ const ModalLogin = ({ isOpen, toggle }) => {
         formData.append("contrasena", contrasena);
 
         const response = await authService.registro(formData);
-        const { cve_tipo_usuario , correo_usuario,usuario, tipo_usuario, link_imagen } = response;
+        const {
+          cve_tipo_usuario,
+          correo_usuario,
+          usuario,
+          tipo_usuario,
+          link_imagen,
+        } = response;
         //const rol = response?.user?.rol
-        setAuth({ cve_tipo_usuario , correo_usuario,usuario, tipo_usuario, link_imagen });
+        setAuth({
+          cve_tipo_usuario,
+          correo_usuario,
+          usuario,
+          tipo_usuario,
+          link_imagen,
+        });
         setIsSending(false);
 
         toggle();
       } else {
         const response = await authService.login(correo, contrasena);
-        console.log("Response", response)
-        const { cve_tipo_usuario , correo_usuario,usuario, tipo_usuario, link_imagen } = response;
+        console.log("Response", response);
+        const {
+          cve_tipo_usuario,
+          correo_usuario,
+          usuario,
+          tipo_usuario,
+          link_imagen,
+        } = response;
         //const rol = response?.user?.rol
-        setAuth({ cve_tipo_usuario , correo_usuario,usuario, tipo_usuario, link_imagen });
+        setAuth({
+          cve_tipo_usuario,
+          correo_usuario,
+          usuario,
+          tipo_usuario,
+          link_imagen,
+        });
         setIsSending(false);
 
         toggle();

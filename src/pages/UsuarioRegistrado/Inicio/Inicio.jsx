@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { SearchBar, SitioCard } from "./components";
 import { Container, Row } from "reactstrap";
+import Select from "react-select";
+import ReactStars from "react-rating-stars-component";
 import { TipoSitio } from "./components";
 import { Loader } from "../../../components";
 import sitiosService from "../../../services/sitios.services";
+
+import "./Inicio.css";
 
 const TIPO_SITIOS = [
   {
@@ -45,17 +49,83 @@ const TIPO_SITIOS = [
   },
 ];
 
+const ETIQUETAS_RESTAURANTE = [
+  { value: 6, label: "Antropología" },
+  { value: 5, label: "Arqueología" },
+  { value: 2, label: "Arte" },
+  { value: 12, label: "Buffet" },
+  { value: 1, label: "Ciencia y tecnología" },
+  { value: 11, label: "Cortes" },
+  { value: 4, label: "Especializado" },
+  { value: 8, label: "Hamburguesas" },
+  { value: 3, label: "Historia" },
+  { value: 10, label: "Mariscos" },
+  { value: 13, label: "Música en vivo" },
+  { value: 9, label: "Pizzas" },
+  { value: 15, label: "Restaurante/Bar" },
+  { value: 14, label: "Románticos" },
+  { value: 7, label: "Tacos" },
+];
+
+const ETIQUETAS_HOTEL = [
+  { value: 1, label: "Alberca" },
+  { value: 2, label: "Estacionamiento" },
+  { value: 3, label: "Aire acondicionado" },
+  { value: 4, label: "Televisión por cable" },
+  { value: 5, label: "Wifi gratis" },
+  { value: 6, label: "Spa" },
+  { value: 7, label: "Bar en hotel" },
+];
+
+const DELEGACIONES = [
+  { value: 0, label: "Todas" },
+  { value: 1, label: "Álvaro Obregón" },
+  { value: 3, label: "Azcapotzalco" },
+  { value: 2, label: "Benito Juárez" },
+  { value: 4, label: "Coyoacán" },
+  { value: 5, label: "Cuajimalpa de Morelos" },
+  { value: 6, label: "Cuauhtémoc" },
+  { value: 7, label: "Gustavo A. Madero" },
+  { value: 8, label: "Iztacalco" },
+  { value: 9, label: "Iztapalapa" },
+  { value: 10, label: "Magdalena Contreras" },
+  { value: 11, label: "Miguel Hidalgo" },
+  { value: 12, label: "Milpa Alta" },
+  { value: 13, label: "Tláhuac" },
+  { value: 14, label: "Tlalpan" },
+  { value: 15, label: "Venustiano Carranza" },
+  { value: 16, label: "Xochimilco" },
+];
+
+const FILTRAR_POR = [
+  { value: 0, label: "Por defecto" },
+  { value: 1, label: "Mejor calificados" },
+  { value: 2, label: "Más populares" },
+  { value: 3, label: "Más cercanos" },
+  { value: 4, label: "Mayor precio" },
+  { value: 5, label: "Menor precio" },
+];
+
 const Inicio = () => {
   const { auth } = useAuth();
   const [activo, setActivo] = useState("Museos");
-  const [isLoading, setIsLoading] = useState(false);
-  const [recomendadosLoading, setRecomendadosLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [recomendadosLoading, setRecomendadosLoading] = useState(false);
   const [listaSitios, setListaSitios] = useState([]);
   const [sitioClave, setSitioClave] = useState(1);
   const [sitiosFiltrados, setSitiosFiltrados] = useState([]);
   const [listaFavs, setListaFavs] = useState([]);
   const [sitiosRecomendados, setSitiosRecomendados] = useState([]);
   const [sitiosMostrar, setSitiosMostar] = useState("todos");
+
+  const [state, setState] = useState(false);
+  const [etiquetasHotel, setEtiquetasHotel] = useState([null]);
+  const [delegacion, setDelegacion] = useState({
+    value: 0,
+    label: "Todas las delegacions",
+  });
+  const [calificacion, setCalificacion] = useState(null);
+  const [filtrarpor, setFiltrarPor] = useState([null]);
 
   useEffect(() => {
     auth.access_token && console.log("Esta loggeado");
@@ -83,7 +153,7 @@ const Inicio = () => {
                   return sitio.cve_sitio;
                 })
               );
-              setIsLoading(false);
+              //setIsLoading(false);
             });
           }
         });
@@ -96,23 +166,33 @@ const Inicio = () => {
   }, []);
 
   const handleSitioClave = (activo) => {
-    const filter = listaSitios.filter(
-      (sitio) => sitio.cve_tipo_sitio === activo
-    );
-    setSitiosFiltrados(filter);
-
     setSitioClave(activo);
   };
 
   const getRecomendaciones = async () => {
-    setRecomendadosLoading(true)
+    setRecomendadosLoading(true);
     const recomendaciones = await sitiosService.getRecomendaciones(
       auth.correo_usuario
     );
     setSitiosRecomendados(recomendaciones);
     setSitiosMostar("recomendacion");
     console.log(recomendaciones);
-    setRecomendadosLoading(false)
+    setRecomendadosLoading(false);
+  };
+
+  const funcionFiltro = async () => {
+    if (state == false) {
+      setState(true);
+    }
+    if (state == true) {
+      setState(false);
+    }
+    console.log("state es: ", state);
+  };
+
+  const ratingChanged = (newRating) => {
+    console.log(newRating);
+    setCalificacion(newRating);
   };
 
   useEffect(() => {
@@ -121,44 +201,236 @@ const Inicio = () => {
     );
   }, [sitiosMostrar]);
 
-  const ListaSitios = () => {
-    return (
-      <div class="row">
-        {sitiosFiltrados.map((sitio) => (
-          <SitioCard
-            sitio={sitio}
-            listaFavs={listaFavs}
-            setListaFavs={setListaFavs}
-          />
-        ))}
-      </div>
+  /*useEffect(() => {
+    setSitiosFiltrados(
+      listaSitios.filter((sitio) => sitio.delegacion === delegacion.label)
+    );
+  }, [delegacion]);*/
+
+  useEffect(() => {
+    const filter = listaSitios.filter(
+      (sitio) => sitio.cve_tipo_sitio === sitioClave
+    );
+    console.log("filter: ", filter, "delegacion: ", delegacion);
+    let filterDelegacion = [];
+    if (delegacion.value == 0) {
+      filterDelegacion = filter;
+    } else {
+      filterDelegacion = filter.filter(
+        (sitio) => sitio.delegacion === delegacion.label
+      );
+    }
+    console.log("filter delegacion: ", filterDelegacion);
+    //setSitiosFiltrados(filterDelegacion);
+    console.log("filtar por: ", filtrarpor);
+    if (filtrarpor != null) {
+      if (filtrarpor.value == 5) {
+        console.log("otra vez 1: ", menorAMayor(filterDelegacion));
+      }
+      if (filtrarpor.value == 4) {
+        console.log("otra vez 2: ", mayorAMenor(filterDelegacion));
+      }
+      if (filtrarpor.value == 1) {
+        console.log("otra vez 2: ", mejorCalificados(filterDelegacion));
+      }
+    }
+    setSitiosFiltrados(filterDelegacion); //// Este si estaba
+
+    console.log("calificacion es: ", calificacion);
+    if (calificacion != null) {
+      //setSitiosFiltrados(porCalificacion(calificacion, filterDelegacion));
+      porCalificacion(calificacion, filterDelegacion);
+      //console.log("aver: ", porCalificacion(calificacion, filterDelegacion));
+    }
+
+    //setSitiosFiltrados(filterDelegacion);   //// Este tambien mas o menos estaba
+    //setSitiosFiltrados(sitiosFiltrados);
+  }, [delegacion, filtrarpor, etiquetasHotel, sitioClave, calificacion]);
+
+  const menorAMayor = async (filterDelegacion) => {
+    console.log("caso 1");
+    console.log("sitiosFiltrados: ", filterDelegacion);
+    setSitiosFiltrados(
+      filterDelegacion.sort((p2, p1) =>
+        p1.costo_promedio < p2.costo_promedio
+          ? 1
+          : p1.costo_promedio > p2.costo_promedio
+          ? -1
+          : 0
+      )
     );
   };
+
+  const mayorAMenor = async (filterDelegacion) => {
+    console.log("caso 2");
+    console.log("sitiosFiltrados: ", filterDelegacion);
+    setSitiosFiltrados(
+      filterDelegacion.sort((p1, p2) =>
+        p1.costo_promedio < p2.costo_promedio
+          ? 1
+          : p1.costo_promedio > p2.costo_promedio
+          ? -1
+          : 0
+      )
+    );
+  };
+
+  const mejorCalificados = async (filterDelegacion) => {
+    console.log("sitiosFiltrados: ", filterDelegacion);
+    setSitiosFiltrados(
+      filterDelegacion.sort((p1, p2) =>
+        p1.calificacion < p2.calificacion
+          ? 1
+          : p1.calificacion > p2.calificacion
+          ? -1
+          : 0
+      )
+    );
+  };
+
+  const porCalificacion = async (calificacion, filterDelegacion) => {
+    console.log("apunto de filtrar calificacions: ", filterDelegacion);
+    //setSitiosFiltrados([]);
+    console.log("antes: ", sitiosFiltrados);
+    let sitiosPorCalificacion = [];
+    setSitiosFiltrados(
+      filterDelegacion.filter((a) => a.calificacion >= calificacion)
+    );
+    console.log("al final sitiosFiltrados es: ", sitiosFiltrados);
+    /*filterDelegacion.map(
+      (p1) => (
+        console.log(p1.calificacion, ">=", calificacion),
+        p1.calificacion >= calificacion && sitiosPorCalificacion.push(p1),
+        console.log("el sitio: ", sitiosPorCalificacion)
+      )
+    );
+    console.log("al final es: ", sitiosPorCalificacion);
+    setSitiosFiltrados(sitiosPorCalificacion);
+    console.log("al final sitiosFiltrados es: ", sitiosFiltrados);
+    /*if (sitiosPorCalificacion == []) {
+      console.log("se regresa lo primero");
+      return [];
+    } else {
+      console.log("sitiosFiltrados final: ", sitiosFiltrados);
+      setSitiosFiltrados('')
+    }*/
+  };
+
+  const limpiar = async () => {
+    setCalificacion(null);
+    setSitiosFiltrados(listaSitios);
+    setDelegacion({ value: 0, label: "Todas las delegacions" });
+    setFiltrarPor({ value: 0, label: "Por defecto" });
+  };
+
+  /*useEffect(() => {
+    if (filtrarpor.value == 5) {
+      setSitiosConFiltro(menorAMayor());
+      console.log("Ha entrado aqui 5: ", filtrarpor);
+    }
+    if (filtrarpor.value == 4) {
+      setSitiosConFiltro(mayorAMenor());
+      console.log("Ha entrado aqui 4: ", filtrarpor);
+    }
+  }, [filtrarpor]);*/
+
+  const ListaSitios = () => {
+    console.log("hola");
+    if (sitiosFiltrados != null || sitiosFiltrados != []) {
+      return (
+        <div class="row">
+          {sitiosFiltrados.map((sitio) => (
+            <SitioCard
+              sitio={sitio}
+              listaFavs={listaFavs}
+              setListaFavs={setListaFavs}
+            />
+          ))}
+        </div>
+      );
+    }
+  };
+
   return (
     <Container fluid style={{ minHeight: "100vh" }}>
       {/* <SearchBar /> */}
-
       <div
         className="row justify-content-center"
         style={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
       >
-        {TIPO_SITIOS.map((sitio) => (
-          <TipoSitio
-            nombre={sitio.nombre}
-            icono={sitio.imagen}
-            cve={sitio.cveTipoSitio}
-            active={sitioClave}
-            handleActivo={handleSitioClave}
-          />
-        ))}
-        {auth.cve_tipo_usuario === 1 && <div className="mostrarSitio">
-          {sitiosMostrar === "todos" ? (
-            <button
-              className="btn btn-primary primario"
-              onClick={() => getRecomendaciones()}
-              disabled={recomendadosLoading}
-            >
-              {recomendadosLoading ? (
+        <div
+          className="filtro1"
+          onClick={(e) => {
+            funcionFiltro();
+          }}
+        >
+          Filtros
+        </div>
+        <div className="column">
+          <div className="row">
+            {TIPO_SITIOS.map((sitio) => (
+              <TipoSitio
+                nombre={sitio.nombre}
+                icono={sitio.imagen}
+                cve={sitio.cveTipoSitio}
+                active={sitioClave}
+                handleActivo={handleSitioClave}
+              />
+            ))}
+          </div>
+          <br />
+          {state == true && (
+            <div className="filtro">
+              <ReactStars
+                count={5}
+                value={calificacion}
+                size={20}
+                activeColor="#ffd700"
+                onChange={ratingChanged}
+                isHalf={true}
+                emptyIcon={<i className="far fa-star"></i>}
+                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                fullIcon={<i className="fa fa-star"></i>}
+              />
+              <Select
+                id="inputEtiquetas"
+                options={ETIQUETAS_HOTEL}
+                value={etiquetasHotel}
+                defaultValue={etiquetasHotel}
+                onChange={setEtiquetasHotel}
+                placeholder="Seleccione una o mas etiquetas..."
+                noOptionsMessage={() => "Etiqueta no encontrada"}
+                isMulti
+              />
+              <Select
+                id="inputDelegacionEditar"
+                options={DELEGACIONES}
+                value={delegacion}
+                defaultValue={delegacion}
+                onChange={setDelegacion}
+                placeholder="Delegacion"
+              />
+              <Select
+                id="inputEtiquetas"
+                options={FILTRAR_POR}
+                value={filtrarpor}
+                defaultValue={filtrarpor}
+                onChange={setFiltrarPor}
+                placeholder="Ordenar"
+              />
+              <button onClick={(e) => limpiar()}>Limpiar filtros</button>
+            </div>
+          )}
+        </div>
+        {auth.cve_tipo_usuario === 1 && (
+          <div className="mostrarSitio">
+            {sitiosMostrar === "todos" ? (
+              <button
+                className="btn btn-primary primario"
+                onClick={() => getRecomendaciones()}
+                disabled={recomendadosLoading}
+              >
+                {recomendadosLoading ? (
                   <span
                     class="spinner-border spinner-border-sm"
                     role="status"
@@ -167,28 +439,32 @@ const Inicio = () => {
                 ) : (
                   <>Mostrar Recomendados</>
                 )}
-            </button>
-          ) : (
-            <button
-              className="btn btn-primary primario"
-              onClick={() => setSitiosMostar("todos")}
-            >
-              Mostrar todos
-            </button>
-          )}
-        </div>}
-        
+              </button>
+            ) : (
+              <button
+                className="btn btn-primary primario"
+                onClick={() => setSitiosMostar("todos")}
+              >
+                Mostrar todos
+              </button>
+            )}
+          </div>
+        )}
       </div>
-
-      {isLoading ? (
+      {isLoading == true && (
         <div
           className="sitios d-flex justify-content-center align-items-center"
           style={{ minHeight: "250px", paddingTop: "25px" }}
         >
+          {console.log("loading")}
           <Loader />
         </div>
-      ) : (
-        <ListaSitios />
+      )}{" "}
+      {isLoading == false && (
+        <div>
+          {console.log("no loading")}
+          <ListaSitios />
+        </div>
       )}
     </Container>
   );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container } from "reactstrap";
 import noImagen from "../../../../assets/Sitios/no-imagen.jpg";
 import { useNavigate } from "react-router-dom";
+import ReactStars from "react-rating-stars-component";
 import Heart from "react-animated-heart";
 import { useAuth } from "../../../../hooks/useAuth";
 import sitiosService from "../../../../services/sitios.services";
@@ -16,11 +17,10 @@ const SitioCard = ({ sitio, listaFavs, setListaFavs }) => {
         cve,
         auth.correo_usuario
       );
-      setListaFavs(nuevosFav.sitios_favoritos)
+      setListaFavs(nuevosFav.sitios_favoritos);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
   };
   const navigate = useNavigate();
   return (
@@ -51,10 +51,20 @@ const SitioCard = ({ sitio, listaFavs, setListaFavs }) => {
 
           <div class="card-body">
             <h5 class="card-title">{sitio.nombre_sitio}</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
+            <ReactStars
+              count={5}
+              value={sitio.calificacion}
+              edit={false}
+              size={20}
+              activeColor="#ffd700"
+              isHalf={true}
+              emptyIcon={<i className="far fa-star"></i>}
+              halfIcon={<i className="fa fa-star-half-alt"></i>}
+              fullIcon={<i className="fa fa-star"></i>}
+            />
+            <p class="card-text">Costo promedio: {sitio.costo_promedio}</p>
+            <p class="card-text">Direccion: {sitio.direccion}</p>
+            {/*<p class="card-text">{sitio.descripcion}</p>*/}
           </div>
           <div class="card-body" className="d-flex flex-row ">
             <button
