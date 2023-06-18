@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { SearchBar, SitioCard } from "./components";
-import { Container, Row } from "reactstrap";
+import { Container, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import Select from "react-select";
 import ReactStars from "react-rating-stars-component";
 import { TipoSitio } from "./components";
@@ -117,6 +117,7 @@ const Inicio = () => {
   const [listaFavs, setListaFavs] = useState([]);
   const [sitiosRecomendados, setSitiosRecomendados] = useState([]);
   const [sitiosMostrar, setSitiosMostar] = useState("todos");
+  const [modalFiltro, setModalFiltro] = useState(false);
 
   const [state, setState] = useState(false);
   const [etiquetasHotel, setEtiquetasHotel] = useState([null]);
@@ -126,6 +127,8 @@ const Inicio = () => {
   });
   const [calificacion, setCalificacion] = useState(null);
   const [filtrarpor, setFiltrarPor] = useState([null]);
+
+  const toggle = () => setModalFiltro(!modalFiltro);
 
   useEffect(() => {
     auth.access_token && console.log("Esta loggeado");
@@ -323,17 +326,6 @@ const Inicio = () => {
     setFiltrarPor({ value: 0, label: "Por defecto" });
   };
 
-  /*useEffect(() => {
-    if (filtrarpor.value == 5) {
-      setSitiosConFiltro(menorAMayor());
-      console.log("Ha entrado aqui 5: ", filtrarpor);
-    }
-    if (filtrarpor.value == 4) {
-      setSitiosConFiltro(mayorAMenor());
-      console.log("Ha entrado aqui 4: ", filtrarpor);
-    }
-  }, [filtrarpor]);*/
-
   const ListaSitios = () => {
     console.log("hola");
     if (sitiosFiltrados != null || sitiosFiltrados != []) {
@@ -351,107 +343,131 @@ const Inicio = () => {
     }
   };
 
+  const ModalFiltrado = ({ toggle, isOpen }) => {
+    return (
+      <Modal size="lg" isOpen={isOpen} toggle={toggle}>
+        <ModalBody>
+          <div className="filtro">
+            <ReactStars
+              count={5}
+              value={calificacion}
+              size={20}
+              activeColor="#ffd700"
+              onChange={ratingChanged}
+              isHalf={true}
+              emptyIcon={<i className="far fa-star"></i>}
+              halfIcon={<i className="fa fa-star-half-alt"></i>}
+              fullIcon={<i className="fa fa-star"></i>}
+            />
+            <Select
+              id="inputEtiquetas"
+              options={ETIQUETAS_HOTEL}
+              value={etiquetasHotel}
+              defaultValue={etiquetasHotel}
+              onChange={setEtiquetasHotel}
+              placeholder="Seleccione una o mas etiquetas..."
+              noOptionsMessage={() => "Etiqueta no encontrada"}
+              isMulti
+            />
+            <Select
+              id="inputDelegacionEditar"
+              options={DELEGACIONES}
+              value={delegacion}
+              defaultValue={delegacion}
+              onChange={setDelegacion}
+              placeholder="Delegacion"
+            />
+            <Select
+              id="inputEtiquetas"
+              options={FILTRAR_POR}
+              value={filtrarpor}
+              defaultValue={filtrarpor}
+              onChange={setFiltrarPor}
+              placeholder="Ordenar"
+            />
+            <button onClick={(e) => limpiar()}>Limpiar filtros</button>
+          </div>
+        </ModalBody>
+      </Modal>
+    );
+  };
+
   return (
     <Container fluid style={{ minHeight: "100vh" }}>
-      {/* <SearchBar /> */}
       <div
         className="row justify-content-center"
         style={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
       >
-        <div
-          className="filtro1"
-          onClick={(e) => {
-            funcionFiltro();
-          }}
-        >
-          Filtros
-        </div>
-        <div className="column">
+        <ModalFiltrado isOpen={modalFiltro} toggle={toggle} />
+        <div className="column" style={{ width: "80%" }}>
           <div className="row">
-            {TIPO_SITIOS.map((sitio) => (
-              <TipoSitio
-                nombre={sitio.nombre}
-                icono={sitio.imagen}
-                cve={sitio.cveTipoSitio}
-                active={sitioClave}
-                handleActivo={handleSitioClave}
-              />
-            ))}
+            <div className={`col-${auth.cve_tipo_usuario === 1 ? "9" : "12"}`}>
+              <div className="row">
+                {TIPO_SITIOS.map((sitio) => (
+                  <TipoSitio
+                    nombre={sitio.nombre}
+                    icono={sitio.imagen}
+                    cve={sitio.cveTipoSitio}
+                    active={sitioClave}
+                    handleActivo={handleSitioClave}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="col-3">
+              {auth.cve_tipo_usuario === 1 && (
+                <div className="row d-flex flex-column">
+                  <div className="col p-1 mb-1">
+                    {sitiosMostrar === "todos" ? (
+                      <a
+                        onClick={() => getRecomendaciones()}
+                        class="codepen-button"
+                      >
+                        <span className="texto" style={{ width: "100%" }}>
+                          {recomendadosLoading ? (
+                            <span
+                              class="spinner-border spinner-border-sm"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                          ) : (
+                            <>Mostrar Recomendaciones</>
+                          )}
+                        </span>
+                      </a>
+                    ) : (
+                      <a
+                        onClick={() => setSitiosMostar("todos")}
+                        class="codepen-button"
+                      >
+                        <span className="texto">Mostrar todos</span>
+                      </a>
+                    )}
+                  </div>
+                  <div className="col p-1 mb-1">
+                    <div
+                      // onClick={() => handleActivo(cve)}
+                      className={`d-flex justify-content-between align-items-center p-3 tipoSitio`}
+                      style={{ height: "50px", width: "100%" }}
+                      onClick={() => toggle()}
+                    >
+                      <p style={{ marginBottom: "0px", fontSize: "14px" }}>
+                        Filtro
+                      </p>
+                      <img
+                        alt="filtro"
+                        style={{ height: "24px", width: "24px" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <br />
-          {state == true && (
-            <div className="filtro">
-              <ReactStars
-                count={5}
-                value={calificacion}
-                size={20}
-                activeColor="#ffd700"
-                onChange={ratingChanged}
-                isHalf={true}
-                emptyIcon={<i className="far fa-star"></i>}
-                halfIcon={<i className="fa fa-star-half-alt"></i>}
-                fullIcon={<i className="fa fa-star"></i>}
-              />
-              <Select
-                id="inputEtiquetas"
-                options={ETIQUETAS_HOTEL}
-                value={etiquetasHotel}
-                defaultValue={etiquetasHotel}
-                onChange={setEtiquetasHotel}
-                placeholder="Seleccione una o mas etiquetas..."
-                noOptionsMessage={() => "Etiqueta no encontrada"}
-                isMulti
-              />
-              <Select
-                id="inputDelegacionEditar"
-                options={DELEGACIONES}
-                value={delegacion}
-                defaultValue={delegacion}
-                onChange={setDelegacion}
-                placeholder="Delegacion"
-              />
-              <Select
-                id="inputEtiquetas"
-                options={FILTRAR_POR}
-                value={filtrarpor}
-                defaultValue={filtrarpor}
-                onChange={setFiltrarPor}
-                placeholder="Ordenar"
-              />
-              <button onClick={(e) => limpiar()}>Limpiar filtros</button>
-            </div>
-          )}
         </div>
-        {auth.cve_tipo_usuario === 1 && (
-          <div className="mostrarSitio">
-            {sitiosMostrar === "todos" ? (
-              <button
-                className="btn btn-primary primario"
-                onClick={() => getRecomendaciones()}
-                disabled={recomendadosLoading}
-              >
-                {recomendadosLoading ? (
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                ) : (
-                  <>Mostrar Recomendados</>
-                )}
-              </button>
-            ) : (
-              <button
-                className="btn btn-primary primario"
-                onClick={() => setSitiosMostar("todos")}
-              >
-                Mostrar todos
-              </button>
-            )}
-          </div>
-        )}
       </div>
-      {isLoading == true && (
+      {isLoading ? (
         <div
           className="sitios d-flex justify-content-center align-items-center"
           style={{ minHeight: "250px", paddingTop: "25px" }}
@@ -459,8 +475,7 @@ const Inicio = () => {
           {console.log("loading")}
           <Loader />
         </div>
-      )}{" "}
-      {isLoading == false && (
+      ) : (
         <div>
           {console.log("no loading")}
           <ListaSitios />

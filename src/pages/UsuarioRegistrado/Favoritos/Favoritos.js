@@ -107,15 +107,23 @@ const Favoritos = () => {
         className="row justify-content-center"
         style={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
       >
-        {TIPO_SITIOS.map((sitio) => (
-          <TipoSitio
-            nombre={sitio.nombre}
-            icono={sitio.imagen}
-            cve={sitio.cveTipoSitio}
-            active={sitioClave}
-            handleActivo={handleSitioClave}
-          />
-        ))}
+        <div className="column" style={{ width: "80%" }}>
+          <div className="row">
+            <div className="col">
+              <div className="row">
+                {TIPO_SITIOS.map((sitio) => (
+                  <TipoSitio
+                    nombre={sitio.nombre}
+                    icono={sitio.imagen}
+                    cve={sitio.cveTipoSitio}
+                    active={sitioClave}
+                    handleActivo={handleSitioClave}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {isLoading ? (

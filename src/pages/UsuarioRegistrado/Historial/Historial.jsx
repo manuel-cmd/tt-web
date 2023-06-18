@@ -55,22 +55,19 @@ const Historial = () => {
   useEffect(() => {
     setIsLoading(true);
     try {
-      sitiosService
-        .getHistorial(auth.correo_usuario)
-        .then((response) => {
-          const filter = response.filter(
-            (sitio) => sitio.cve_tipo_sitio === sitioClave
-          );
-          setSitiosFiltrados(filter);
-          setListaSitios(response);
-          console.log(filter);
-        })
+      sitiosService.getHistorial(auth.correo_usuario).then((response) => {
+        const filter = response.filter(
+          (sitio) => sitio.cve_tipo_sitio === sitioClave
+        );
+        setSitiosFiltrados(filter);
+        setListaSitios(response);
+        console.log(filter);
+      });
       console.log("los sitios son: ", listaSitios);
-
     } catch (error) {
-      console.log(error)    }
+      console.log(error);
+    }
     setIsLoading(false);
-
   }, []);
 
   const handleSitioClave = (activo) => {
@@ -86,9 +83,7 @@ const Historial = () => {
     return (
       <div class="row">
         {sitiosFiltrados.map((sitio) => (
-          <SitioCard
-            sitio={sitio}
-          />
+          <SitioCard sitio={sitio} />
         ))}
       </div>
     );
@@ -99,17 +94,25 @@ const Historial = () => {
 
       <div
         className="row justify-content-center"
-        style={{ marginTop: "15px", marginBottom:"15px", width: "100%" }}
+        style={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
       >
-        {TIPO_SITIOS.map((sitio) => (
-          <TipoSitio
-            nombre={sitio.nombre}
-            icono={sitio.imagen}
-            cve={sitio.cveTipoSitio}
-            active={sitioClave}
-            handleActivo={handleSitioClave}
-          />
-        ))}
+        <div className="column" style={{ width: "80%" }}>
+          <div className="row">
+            <div className="col">
+              <div className="row">
+                {TIPO_SITIOS.map((sitio) => (
+                  <TipoSitio
+                    nombre={sitio.nombre}
+                    icono={sitio.imagen}
+                    cve={sitio.cveTipoSitio}
+                    active={sitioClave}
+                    handleActivo={handleSitioClave}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {isLoading ? (
@@ -121,10 +124,9 @@ const Historial = () => {
         </div>
       ) : (
         <>
-        <ListaSitiosFiltrados />
+          <ListaSitiosFiltrados />
         </>
       )}
-
     </Container>
   );
 };

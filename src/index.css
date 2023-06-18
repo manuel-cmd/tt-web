@@ -1,8 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -54,12 +52,30 @@ code {
 }
 
 .activeSitio {
-  border-bottom: 3px solid black;
+  background-color: #0a4d68;
+}
+
+.activeSitio p{
+  color: white !important;
+}
+
+.tipoSitio{
+  border: 2px solid #0a4d68;
+  border-radius: 15px;
 }
 
 .tipoSitio:hover {
-  border-bottom: 3px solid black;
+  background-color: #0a4d68;
 }
+
+.tipoSitio p{
+  color: #0a4d68;
+}
+
+.tipoSitio:hover p{
+  color: white;
+}
+
 
 .loader {
   width: 48px;
@@ -334,10 +350,58 @@ footer
   margin-bottom: 0px;
 }
 
-.mostrarSitio{
+/* boton recomendaciones */
+.codepen-button {
+  display: block;
+  cursor: pointer;
+  color: white;
+  margin: 0 auto;
+  position: relative;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 15px;
+  overflow: hidden;
+  padding: 3px;
+  isolation: isolate;
+  width: 100%;
+  height: 50px;
+}
+
+.codepen-button::before {
+  content: "";
   position: absolute;
-  right: 100px;
+  top: 0;
+  left: 0;
+  width: 400%;
+  height: 100%;
+  background: linear-gradient(138deg, rgb(32, 201, 255) 36.7%, rgb(0, 8, 187) 84.4%, rgb(255, 255, 255) 119.7%);
+  background-size: 25% 100%;
+  animation: an-at-keyframe-css-at-rule-that-translates-via-the-transform-property-the-background-by-negative-25-percent-of-its-width-so-that-it-gives-a-nice-border-animation_-We-use-the-translate-property-to-have-a-nice-transition-so-it_s-not-a-jerk-of-a-start-or-stop .75s linear infinite;
+  animation-play-state: paused;
+  translate: -5% 0%;
+  transition: translate 0.25s ease-out;
+}
+
+.codepen-button:hover::before {
+  animation-play-state: running;
+  transition-duration: 0.75s;
+  translate: 0% 0%;
+}
+
+@keyframes an-at-keyframe-css-at-rule-that-translates-via-the-transform-property-the-background-by-negative-25-percent-of-its-width-so-that-it-gives-a-nice-border-animation_-We-use-the-translate-property-to-have-a-nice-transition-so-it_s-not-a-jerk-of-a-start-or-stop {
+  to {
+    transform: translateX(-25%);
+  }
+}
+
+.codepen-button span.texto {
+  position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
-  height: 80px;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  background: white;
+  border-radius: 15px;
+  height: 100%;
 }

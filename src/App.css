@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-body {
-  font-family: 'Roboto', sans-serif;
-}
-
 * {
   padding: 0;
   margin: 0;
@@ -39,7 +35,16 @@ div ul li a {
 }
 
 .menu ul li a:hover, .menu ul li a.active {
-  background-color: #00ffca;
+  background-color: #0a4d68;
+  color: white !important
+}
+
+.menu ul li a{
+  border-radius: 50px;
+  font-size: 14px;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #0a4d68 !important;
 }
 
 .checkbtn {
@@ -63,6 +68,7 @@ div ul li a {
 
   div ul li a {
     font-size: 16px;
+    background-color: red;
   }
 }
 
@@ -92,11 +98,6 @@ div ul li a {
     font-size: 20px;
   }
 
-  li a:hover,
-  li a.active {
-    background: none;
-    color: red;
-  }
 
   #check:checked ~ ul {
     left: 0;
