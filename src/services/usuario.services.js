@@ -81,11 +81,28 @@ const editResena = async (form) => {
     });
 };
 
-const getRecomendaciones = async (access_token) => {
+const getRecomendaciones = async (correo_usuario) => {
   return axios
-    .get(API + `/mostrar_recomendaciones/${access_token}`, {
+    .get(API + `/mostrar_recomendaciones/${correo_usuario}`, {
       headers: { "Content-Type": "application/json" },
     })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const removeResena = async (correo_usuario, cve_sitio) => {
+  return axios
+    .delete(
+      API + `/eliminar_comentario`,
+      { data: { correo_usuario, cve_sitio } },
+      {
+        headers: {
+          "Access-Control-Allow-Origin": true,
+          "Content-Type": "application/json",
+        },
+      }
+    )
     .then((response) => {
       return response.data;
     });
@@ -111,6 +128,7 @@ const usuariosService = {
   getResenas,
   addResena,
   editResena,
+  removeResena,
   getRecomendaciones,
   editCuenta,
 };

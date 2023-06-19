@@ -4,6 +4,7 @@ import sitiosService from "../../../services/sitios.services";
 import { Loader, Mapa } from "../../../components";
 import { COLORS } from "../../../constants/colors";
 import Editar from "./components/Editar";
+import Estatus from "./components/Estatus";
 import ModalNuevoSitio from "./components/ModalNuevoSitio";
 import Ver from "./components/Ver";
 import Eliminar from "./components/Eliminar";
@@ -15,9 +16,12 @@ const Sitios = () => {
   const [modalNuevoSitio, setModalNuevoSitio] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [sitioEditar, setSitioEditar] = useState({});
+  const [isSending, setIsSending] = useState(false);
+  const [nuevo, setNuevo] = useState(false);
 
   const toggle = () => setModalNuevoSitio(!modalNuevoSitio);
   const toggleEditar = () => setModalEditar(!modalEditar);
+  const refresh = () => window.location.reload(true);
 
   useEffect(() => {
     try {
@@ -76,10 +80,11 @@ const Sitios = () => {
       selector: (row) => (
         <div
           className="d-flex flex-row justify-content-center"
-          style={{ width: "100px" }}
+          style={{ width: "150px" }}
         >
           <Editar sitioEditar={row} handleModalEditar={handleModalEditar} />
           <Ver id={row.cve_sitio} />
+          <Estatus id={row.cve_sitio} status={row.habilitado} />
           <Eliminar id={row.cve_sitio} />
         </div>
       ),
@@ -91,9 +96,22 @@ const Sitios = () => {
     toggleEditar();
   };
 
+  const handleSubmit = async (e) => {
+    console.log("e es:", e);
+    setNuevo(true);
+  };
+
+  useEffect(() => {
+    if (nuevo != false) refresh();
+  }, [nuevo]);
+
   return (
     <div className="container">
-      <ModalNuevoSitio toggle={toggle} isOpen={modalNuevoSitio} />
+      <ModalNuevoSitio
+        toggle={toggle}
+        isOpen={modalNuevoSitio}
+        handleSubmit={handleSubmit}
+      />
       <ModalEditarSitio
         sitio={sitioEditar}
         toggle={toggleEditar}

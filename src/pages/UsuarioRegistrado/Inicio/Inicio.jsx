@@ -348,27 +348,44 @@ const Inicio = () => {
       <Modal size="lg" isOpen={isOpen} toggle={toggle}>
         <ModalBody>
           <div className="filtro">
-            <ReactStars
-              count={5}
-              value={calificacion}
-              size={20}
-              activeColor="#ffd700"
-              onChange={ratingChanged}
-              isHalf={true}
-              emptyIcon={<i className="far fa-star"></i>}
-              halfIcon={<i className="fa fa-star-half-alt"></i>}
-              fullIcon={<i className="fa fa-star"></i>}
-            />
-            <Select
-              id="inputEtiquetas"
-              options={ETIQUETAS_HOTEL}
-              value={etiquetasHotel}
-              defaultValue={etiquetasHotel}
-              onChange={setEtiquetasHotel}
-              placeholder="Seleccione una o mas etiquetas..."
-              noOptionsMessage={() => "Etiqueta no encontrada"}
-              isMulti
-            />
+            <div className="row">
+              Seleccione una Calificacion
+              <ReactStars
+                count={5}
+                value={calificacion}
+                size={20}
+                activeColor="#ffd700"
+                onChange={ratingChanged}
+                isHalf={true}
+                emptyIcon={<i className="far fa-star"></i>}
+                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                fullIcon={<i className="fa fa-star"></i>}
+              />
+            </div>
+            {sitioClave == 1 && (
+              <Select
+                id="inputEtiquetas"
+                options={ETIQUETAS_HOTEL}
+                value={etiquetasHotel}
+                defaultValue={etiquetasHotel}
+                onChange={setEtiquetasHotel}
+                placeholder="Seleccione una o mas etiquetas..."
+                noOptionsMessage={() => "Etiqueta no encontrada"}
+                isMulti
+              />
+            )}
+            {sitioClave == 6 && (
+              <Select
+                id="inputEtiquetas"
+                options={ETIQUETAS_HOTEL}
+                value={etiquetasHotel}
+                defaultValue={etiquetasHotel}
+                onChange={setEtiquetasHotel}
+                placeholder="Seleccione una o mas etiquetas..."
+                noOptionsMessage={() => "Etiqueta no encontrada"}
+                isMulti
+              />
+            )}
             <Select
               id="inputDelegacionEditar"
               options={DELEGACIONES}
@@ -385,7 +402,12 @@ const Inicio = () => {
               onChange={setFiltrarPor}
               placeholder="Ordenar"
             />
-            <button onClick={(e) => limpiar()}>Limpiar filtros</button>
+            <span
+              className="btn primario btn-primary btn-block"
+              onClick={(e) => limpiar()}
+            >
+              Limpiar filtros
+            </span>
           </div>
         </ModalBody>
       </Modal>

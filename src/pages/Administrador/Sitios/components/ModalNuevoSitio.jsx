@@ -6,6 +6,8 @@ import { Toaster } from "react-hot-toast";
 import Select from "react-select";
 import { Mapa } from "../../../../components";
 import sitiosService from "../../../../services/sitios.services";
+import { useAuth } from "../../../../hooks/useAuth";
+import { ROUTES } from "../../../../constants/routes";
 
 const TIPO_SITIO = [
   { value: 1, label: "Museo" },
@@ -63,7 +65,10 @@ const ETIQUETAS_HOTEL = [
   { cve_servicio: 7, nombre: "Bar en hotel" },
 ];
 
-const ModalNuevoSitio = ({ isOpen, toggle }) => {
+const ModalNuevoSitio = ({ isOpen, toggle, handleSubmit }) => {
+  const { auth } = useAuth();
+  const navigate = useNavigate();
+
   const [tipo_sitio, setTipo_sitio] = useState(1);
   const [correo, setCorreo] = useState("");
   const [nombre_sitio, setNombre] = useState(null);
@@ -115,7 +120,7 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
     console.log(ubicacion);
   }, [ubicacion]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
     setIsSending(true);
 
@@ -132,6 +137,7 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
     try {
       const formData = new FormData();
       formData.append("nombre_sitio", nombre_sitio);
+      formData.append("correo_usuario", auth.correo_usuario);
       formData.append("latitud", ubicacion.lat);
       formData.append("longitud", ubicacion.lng);
       formData.append("descripcion", descripcion);
@@ -145,15 +151,20 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
       formData.append("cve_delegacion", delegacion.value);
       formData.append("colonia", colonia);
       formData.append("etiquetas", JSON.stringify(etiquetas));
+      formData.append("servicios", JSON.stringify(servicios));
       //formData.append("horarios", JSON.stringify(horarios));
       formData.append("fotos_sitio", foto_sitio);
 
       const response = await sitiosService.addServicios(formData);
-      console.log(response);
+      //console.log(response);
+      handleSubmit(response);
       //const rol = response?.user?.rol
       setIsSending(false);
+      toast.success(response.mensaje);
 
       toggle();
+
+      //navigate(`/${ROUTES.INICIO}`);
     } catch (err) {
       setIsSending(false);
       console.log(err);
@@ -207,7 +218,7 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
                 />
               </div>
               {/* Se supone que aqui va un renderizado condicional */}
-              {tipo_sitio?.value == 3 && (
+              {tipo_sitio?.value == 5 && (
                 <div class="form-group col-md-6">
                   <label for="inputEtiquetas">Etiquetas</label>
                   <Select
@@ -222,7 +233,7 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
                   />
                 </div>
               )}
-              {tipo_sitio?.value == 4 && (
+              {(tipo_sitio?.value == 6 || tipo_sitio.value == 1) && (
                 <div class="form-group col-md-6">
                   <label for="inputEtiquetas">Etiquetas</label>
                   <Select
@@ -339,205 +350,13 @@ const ModalNuevoSitio = ({ isOpen, toggle }) => {
                 />
               </div>
             </div>
-
-            <div class="form-group row">
-              <div class="form-group">
-                <div class="form-group row">
-                  <div class="form-group col-md-2">
-                    <label for="inputAdscripcion">Lunes: </label>
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioLunesA}
-                      onChange={(e) => setHorarioLunesA(e.target.value)}
-                      placeholder="00:00"
-                    />
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioLunesC}
-                      onChange={(e) => setHorarioLunesC(e.target.value)}
-                      placeholder="00:00"
-                    />
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="form-group col-md-2">
-                    <label for="inputAdscripcion">Martes: </label>
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioMartesA}
-                      onChange={(e) => setHorarioMartesA(e.target.value)}
-                      placeholder="00:00"
-                    />
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioMartesC}
-                      onChange={(e) => setHorarioMartesC(e.target.value)}
-                      placeholder="00:00"
-                    />
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="form-group col-md-2">
-                    <label for="inputAdscripcion">Miercoles: </label>
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioMiercolesA}
-                      onChange={(e) => setHorariomMiercolesA(e.target.value)}
-                      placeholder="00:00"
-                    />
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      placeholder="00:00"
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioMiercolesC}
-                      onChange={(e) => setHorariomMiercolesC(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="form-group col-md-2">
-                    <label for="inputAdscripcion">Jueves: </label>
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      placeholder="00:00"
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioJuevesA}
-                      onChange={(e) => setHorarioJuevesA(e.target.value)}
-                    />
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      placeholder="00:00"
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioJuevesC}
-                      onChange={(e) => setHorarioJuevesC(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="form-group col-md-2">
-                    <label for="inputAdscripcion">Viernes: </label>
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioViernesA}
-                      onChange={(e) => setHorarioViernesA(e.target.value)}
-                      placeholder="00:00"
-                    />
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      placeholder="00:00"
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioViernesC}
-                      onChange={(e) => setHorarioViernesC(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="form-group col-md-2">
-                    <label for="inputAdscripcion">Sabado: </label>
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      placeholder="00:00"
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioSabadoA}
-                      onChange={(e) => setHorarioSabadoA(e.target.value)}
-                    />
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      placeholder="00:00"
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioSabadoC}
-                      onChange={(e) => setHorarioSabadoC(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="form-group col-md-2">
-                    <label for="inputAdscripcion">Domingo: </label>
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      placeholder="00:00"
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioDomingoA}
-                      onChange={(e) => setHorarioDomingoA(e.target.value)}
-                    />
-                  </div>
-                  <div class="form-group col-md-4">
-                    <input
-                      placeholder="00:00"
-                      type="text"
-                      class="form-control"
-                      id="inputAdscripcion"
-                      value={horarioDomingoC}
-                      onChange={(e) => setHorarioDomingoC(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-md-2">
-                <label for="formFile" class="form-label">
-                  Foto Perifl
-                </label>
-                <input
-                  class="form-control"
-                  type="file"
-                  id="formFile"
-                  accept="image/*"
-                  onChange={(e) => setFoto_sitio(e.target.files[0])}
-                ></input>
-              </div>
-            </div>
           </form>
           <Mapa setUbicacion={setUbicacion} ubicacion={ubicacion} />
         </ModalBody>
         <ModalFooter>
           <button
             type="button"
-            onClick={(e) => handleSubmit(e)}
+            onClick={(e) => handleSubmitForm(e)}
             class="btn primario btn-block"
             style={{ color: "white", height: "50px" }}
           >

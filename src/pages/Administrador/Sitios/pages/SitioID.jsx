@@ -27,14 +27,16 @@ const SitioID = () => {
   const [imagenes, setImagenes] = useState([]);
   const [isSending, setIsSending] = useState(false);
   const [isClick, setClick] = useState(false);
-
+  const [visitado, setVisitado] = useState(false);
   const [resenas, setResenas] = useState([]);
+  const [nuevaresenaU, setNuevaResenaU] = useState(false);
 
   const { id } = useParams();
   const { auth } = useAuth();
   const { setAuth } = useAuth();
 
   const toggle = () => setModalResena(!modalResena);
+  const refresh = () => window.location.reload(true);
 
   useEffect(() => {
     try {
@@ -45,12 +47,14 @@ const SitioID = () => {
             setIsLoading(false);
             console.log("SitioID", response);
             setSitio(response);
+            setVisitado(response.visitado);
+            setResenas(response.comentarios);
           });
         //consegirResenas();
         sitiosService.getResenas(auth.correo_usuario).then((response) => {
           //setIsLoading(false);
           console.log("resenas", response);
-          setResenas(response);
+          //setResenas(response);
         });
       } else {
         sitiosService.getServicioById(id).then((response) => {
@@ -63,10 +67,6 @@ const SitioID = () => {
       console.log(error);
     }
   }, []);
-
-  useEffect(() => {
-    console.log(nuevaResena);
-  }, [nuevaResena]);
 
   const AgregarReseña = () => {
     return (
@@ -96,15 +96,22 @@ const SitioID = () => {
       formData.append("correo_usuario", auth?.correo_usuario);
       formData.append("comentario", resena);
       formData.append("calificacion", calificacion);
-      formData.append("fotos_sitio", imagenes);
+      for (const image of imagenes) {
+        formData.append("fotos_sitio", image);
+      }
+      //formData.append("fotos_sitio", imagenes);
 
       const response = await usuariosService.addResena(formData);
+      const mini = [{ resena, calificacion, imagenes }];
+      setNuevaResenaU(mini);
+
       console.log("response: ", response);
       //const { access_token, foto, tipo_usuario, usuario } = response;
       //const rol = response?.user?.rol
       //setAuth({ access_token, foto, tipo_usuario, usuario });
       setNuevaResena(response);
       toggle();
+      refresh();
     } catch (err) {
       console.log(err);
       toast.error(
@@ -115,6 +122,7 @@ const SitioID = () => {
     }
   };
 
+  const agregarVisita = (e) => {};
   const addFavoritos = (e) => {
     setClick(!isClick);
   };
@@ -128,6 +136,8 @@ const SitioID = () => {
       );
       console.log(response);
       setSitio(response.datos_sitio);
+      if (visitado == true) setVisitado(false);
+      if (visitado == false) setVisitado(true);
       toast.success(response.mensaje);
     } catch (error) {
       console.log(error);
@@ -137,6 +147,9 @@ const SitioID = () => {
   };
 
   //useEffect(() => {}, [resenaTemp, calificacion, imagenes]);
+  useEffect(() => {
+    console.log(nuevaResena);
+  }, [nuevaResena]);
 
   const ListaResenas = () => {
     return (
@@ -145,13 +158,25 @@ const SitioID = () => {
         {resenas.length == 0 && (
           <div className="container d-flex flex-column justify-content-center align-items-center">
             <p>No hay reseñas para este sitio :(</p>
-            {sitio.visitado && (
+            {visitado && auth.tipo_usuario == "Usuario registrado" && (
               <>
                 <p>Se el primero y agrega una reseña</p>
                 <AgregarReseña />
               </>
             )}
           </div>
+        )}
+        {resenas.length > 0 && auth.tipo_usuario == "Usuario registrado" && (
+          <div className="container d-flex flex-column justify-content-center align-items-center">
+            {visitado && auth.tipo_usuario == "Usuario registrado" && (
+              <>
+                <AgregarReseña />
+              </>
+            )}
+          </div>
+        )}
+        {resenas.length == 0 && nuevaresenaU != false && (
+          <Resena comentarios={nuevaresenaU} />
         )}
       </div>
     );
@@ -182,28 +207,30 @@ const SitioID = () => {
                     <CarruselImagenes imagenes={sitio.fotos} />
                     {auth.correo_usuario && (
                       <>
-                        <button
-                          disabled={isSending}
-                          onClick={() => addVisita(sitio.cve_sitio)}
-                          className={`btn btn-${
-                            sitio.visitado ? "danger" : "primary primario"
-                          } btn-block`}
-                          style={{ height: "50px" }}
-                        >
-                          {isSending ? (
-                            <span
-                              class="spinner-border spinner-border-sm"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                          ) : (
-                            <>
-                              {sitio.visitado
-                                ? "Quitar Visita"
-                                : "Registra Visita"}
-                            </>
-                          )}
-                        </button>
+                        {auth.tipo_usuario == "Usuario registrado" && (
+                          <button
+                            disabled={isSending}
+                            onClick={() => addVisita(sitio.cve_sitio)}
+                            className={`btn btn-${
+                              sitio.visitado ? "danger" : "primary primario"
+                            } btn-block`}
+                            style={{ height: "50px" }}
+                          >
+                            {isSending ? (
+                              <span
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                            ) : (
+                              <>
+                                {sitio.visitado
+                                  ? "Quitar Visita"
+                                  : "Registra Visita"}
+                              </>
+                            )}
+                          </button>
+                        )}
                       </>
                     )}
                   </div>
@@ -226,7 +253,7 @@ const SitioID = () => {
                         >
                           <ReactStars
                             count={5}
-                            value={5}
+                            value={sitio.calificacion}
                             edit={false}
                             size={20}
                             activeColor="#ffd700"

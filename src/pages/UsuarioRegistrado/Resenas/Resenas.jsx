@@ -185,62 +185,6 @@ const Resenas = () => {
     );
   }, [sitiosMostrar]);
 
-  useEffect(() => {
-    const filter = listaSitios.filter(
-      (sitio) => sitio.cve_tipo_sitio === sitioClave
-    );
-    console.log("filter: ", filter, "delegacion: ", delegacion);
-    let filterDelegacion = [];
-    if (delegacion.value == 0) {
-      filterDelegacion = filter;
-    } else {
-      filterDelegacion = filter.filter(
-        (sitio) => sitio.delegacion === delegacion.label
-      );
-    }
-    console.log("filter delegacion: ", filterDelegacion);
-    setSitiosFiltrados(filterDelegacion);
-    console.log("filtar por: ", filtrarpor);
-    if (filtrarpor != null) {
-      if (filtrarpor.value == 5) {
-        console.log("otra vez 1: ", menorAMayor(filterDelegacion));
-      }
-      if (filtrarpor.value == 4) {
-        console.log("otra vez 2: ", mayorAMenor(filterDelegacion));
-      }
-    }
-
-    //setSitiosFiltrados(sitiosFiltrados);
-  }, [delegacion, filtrarpor, etiquetasHotel, sitioClave]);
-
-  const menorAMayor = async (filterDelegacion) => {
-    console.log("caso 1");
-    console.log("sitiosFiltrados: ", filterDelegacion);
-    setSitiosFiltrados(
-      filterDelegacion.sort((p2, p1) =>
-        p1.costo_promedio < p2.costo_promedio
-          ? 1
-          : p1.costo_promedio > p2.costo_promedio
-          ? -1
-          : 0
-      )
-    );
-  };
-
-  const mayorAMenor = async (filterDelegacion) => {
-    console.log("caso 2");
-    console.log("sitiosFiltrados: ", filterDelegacion);
-    setSitiosFiltrados(
-      filterDelegacion.sort((p1, p2) =>
-        p1.costo_promedio < p2.costo_promedio
-          ? 1
-          : p1.costo_promedio > p2.costo_promedio
-          ? -1
-          : 0
-      )
-    );
-  };
-
   const ListaSitios = () => {
     console.log("hola");
 
@@ -265,14 +209,6 @@ const Resenas = () => {
         className="row justify-content-center"
         style={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
       >
-        <div
-          className="filtro1"
-          onClick={(e) => {
-            funcionFiltro();
-          }}
-        >
-          Filtros
-        </div>
         <div className="column">
           <div className="row">
             {TIPO_SITIOS.map((sitio) => (

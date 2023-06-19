@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import Select from "react-select";
 import { Mapa } from "../../../../components";
 import sitiosService from "../../../../services/sitios.services";
+import { useAuth } from "../../../../hooks/useAuth";
 
 const TIPO_SITIO = [
   { value: 1, label: "Museo" },
@@ -65,6 +66,8 @@ const ETIQUETAS_HOTEL = [
 
 const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
   console.log("a ver, el sitio es: ", sitio);
+  const { auth } = useAuth();
+
   const [tipo_sitio, setTipo_sitio] = useState(1);
   const [correo, setCorreo] = useState();
   const [nombre_sitio, setNombre] = useState("");
@@ -77,6 +80,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
   const [costo_promedio, setCostoPromedio] = useState();
   const [adscripcion, setAdscripcion] = useState();
   const [etiquetas, setEtiquetas] = useState();
+  const [servicios, setServicios] = useState();
   const [fotografiasC, setFotografias] = useState("");
   const [ubicacion, setUbicacion] = useState({
     lat: 19.4324454,
@@ -94,9 +98,8 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
 
   useEffect(() => {
     setNombre(sitio.nombre_sitio);
-    setTipo_sitio(sitio.tipo_sitio);
+    setTipo_sitio(sitio.cve_tipo_sitio);
     setCorreo(sitio.correo);
-    setNombre("");
     setDireccion(sitio.direccion);
     setTelefono(sitio.telefono);
     setPaginaWeb(sitio.pagina_web);
@@ -106,11 +109,9 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
     setCostoPromedio(sitio.costo_promedio);
     setAdscripcion(sitio.adscripcion);
     setEtiquetas(sitio.etiquetas);
+    setEtiquetas(sitio.servicios);
     setFotografias("");
-    setUbicacion({
-      lat: 19.4324454,
-      lng: -99.1330281,
-    });
+    setUbicacion({ lat: 19.4324454, lng: -99.1330281 });
     setFoto_sitio(null);
     setIsSending(false);
   }, [sitio]);
@@ -118,13 +119,20 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSending(true);
-
+    console.log("a punto de editar");
+    console.log("cve_sitio: ", sitio.cve_sitio);
     try {
       const formData = new FormData();
-
+      console.log("nombre: ", nombre_sitio);
+      formData.append("correo_usuario", auth.correo_usuario);
       formData.append("nombre_sitio", nombre_sitio);
+      formData.append("cve_sitio", sitio.cve_sitio);
+      console.log("cve_sitio: ", sitio.cve_sitio);
+      console.log("latitud: ", ubicacion.lat);
       formData.append("latitud", ubicacion.lat);
+      console.log("longitud: ", ubicacion.lng);
       formData.append("longitud", ubicacion.lng);
+      console.log("descripcion: ", descripcion);
       formData.append("descripcion", descripcion);
       formData.append("correo", correo);
       formData.append("costo", costo_promedio);
@@ -136,6 +144,7 @@ const ModalEditarSitio = ({ sitio, isOpen, toggle }) => {
       formData.append("cve_delegacion", delegacion.value);
       formData.append("colonia", colonia);
       formData.append("etiquetas", JSON.stringify(etiquetas));
+      formData.append("servicios", JSON.stringify(servicios));
       //formData.append("horarios", JSON.stringify(horarios));
       formData.append("fotos_sitio", foto_sitio);
 

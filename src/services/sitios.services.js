@@ -16,7 +16,7 @@ const addServicios = async (form) => {
 
 const editServicios = async (form) => {
   return axios
-    .post(API + "/editar_sitio", form, {
+    .put(API + "/modificar_sitio", form, {
       headers: {
         "Access-Control-Allow-Origin": true,
         "Content-Type": "multipart/form-data",
@@ -63,14 +63,19 @@ const getServicioById = async (id, correo_usuario) => {
     });
 };
 
-const removeServicios = async (cve_sitio) => {
+const removeServicios = async (correo_usuario, cve_sitio) => {
+  console.log("daos: ", correo_usuario, cve_sitio);
   return axios
-    .post(API + "/eliminar_sitio", cve_sitio, {
-      headers: {
-        "Access-Control-Allow-Origin": true,
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    .delete(
+      API + "/eliminar_sitio",
+      { data: { correo_usuario, cve_sitio } },
+      {
+        headers: {
+          "Access-Control-Allow-Origin": true,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    )
     .then((response) => {
       return response.data;
     });

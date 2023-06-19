@@ -18,22 +18,26 @@ const ModalResena = ({
   setImagenes,
   enviarResena,
 }) => {
+  const [img, setImg] = useState([]);
+
   const onSelectFile = (event) => {
     const selectedFiles = event.target.files;
     const selectedFilesArray = Array.from(selectedFiles);
-
+    console.log("selectedFiles: ", selectedFiles);
+    console.log("selectedFilesArray: ", selectedFilesArray);
     const imagesArray = selectedFilesArray.map((file) => {
       return URL.createObjectURL(file);
+      //return selectedFilesArray;
     });
 
-    setImagenes((previousImages) => previousImages.concat(imagesArray));
-
+    setImg((previousImages) => previousImages.concat(imagesArray));
+    setImagenes(selectedFilesArray);
     // FOR BUG IN CHROME
     event.target.value = "";
   };
 
   function deleteHandler(image) {
-    setImagenes(imagenes.filter((e) => e !== image));
+    setImg(imagenes.filter((e) => e !== image));
     URL.revokeObjectURL(image);
   }
 
@@ -92,18 +96,16 @@ const ModalResena = ({
               />
             </label>
             <br />
-
             <br />
             <div className="images">
-              {imagenes &&
-                imagenes.map((image, index) => {
+              {img &&
+                img.map((image, index) => {
                   return (
                     <div key={image} className="image">
                       <img src={image} height="200" alt="upload" />
                       <button onClick={() => deleteHandler(image)}>
                         Borrar
                       </button>
-                      {/*<p>{index + 1}</p>*/}
                     </div>
                   );
                 })}

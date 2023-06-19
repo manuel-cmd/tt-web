@@ -10,6 +10,10 @@ import ModalEditarResena from "./ModalEditarResena";
 import "./resenaCard.css";
 import { CarruselImagenes } from "../../../../components";
 
+import usuariosService from "../../../../services/usuario.services";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../../constants/routes";
+
 const ResenaCard = ({ sitio }) => {
   const { auth } = useAuth();
 
@@ -19,9 +23,27 @@ const ResenaCard = ({ sitio }) => {
   const [resenaTemp, setResenaTemp] = useState("");
   const [calificacion, setCalificacion] = useState("0");
   const [imagenes, setImagenes] = useState([]);
+  const navigate = useNavigate();
 
   const toggle = () => setModalNuevoSitio(!modalNuevoSitio);
-
+  const eliminarResena = () => {
+    try {
+      usuariosService
+        .removeResena(auth.correo_usuario, sitio.cve_sitio)
+        .then((response) => {
+          //setListaSitios(response);
+          console.log(response);
+          setIsLoading(false);
+          navigate(`/${ROUTES.RESENAS}`);
+        });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+    //console.log("la resena es: ", resena, calificacion, imagenes);
+    // setNuevaResena(resena);
+    //toggle();
+  };
   const editarResena = (resena, calificacion, imagenes) => {
     console.log("la resena es: ", resena, calificacion, imagenes);
     // setNuevaResena(resena);
@@ -31,7 +53,7 @@ const ResenaCard = ({ sitio }) => {
   return (
     <>
       <div class=" mx-auto col-10 col-md-8 col-lg-8">
-        <ModalEditarResena
+        {/*<ModalEditarResena
           toggle={toggle}
           isOpen={modalNuevoSitio}
           resena={resenaTemp}
@@ -41,7 +63,7 @@ const ResenaCard = ({ sitio }) => {
           imagenes={imagenes}
           setImagenes={setImagenes}
           editarResena={editarResena}
-        />
+        />*/}
 
         <div class="">
           <div>
@@ -83,7 +105,7 @@ const ResenaCard = ({ sitio }) => {
                   {console.log("caso 1")}
                 </div>
               ) : (
-                <CarruselImagenes imagenes={sitio.fotos} />
+                <CarruselImagenes imagenes={sitio.foto} />
               )}
             </div>
             <div class="form-group col-md-7">
@@ -94,9 +116,9 @@ const ResenaCard = ({ sitio }) => {
               <div class="" className="mx-auto col-10 col-md-8 col-lg-8">
                 <button
                   className="btn primario btn-primary btn-block"
-                  onClick={() => toggle()}
+                  onClick={() => eliminarResena()}
                 >
-                  Editar
+                  Eliminar
                 </button>
               </div>
             </div>
