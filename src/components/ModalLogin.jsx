@@ -68,8 +68,8 @@ const ModalLogin = ({ isOpen, toggle }) => {
         formData.append("correo", correo);
         formData.append("usuario", user);
         formData.append("contrasena", contrasena);
-        formData.append("etiquetas", setEtiquetasRestaurante);
-        formData.append("servicios", setEtiquetasHotel);
+        formData.append("etiquetas", JSON.stringify(etiquetasRestaurante));
+        formData.append("servicios", JSON.stringify(etiquetasHotel));
 
         const response = await authService.registro(formData);
         const {

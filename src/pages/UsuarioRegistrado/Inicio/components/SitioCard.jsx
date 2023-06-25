@@ -36,6 +36,7 @@ const SitioCard = ({ sitio, listaFavs, setListaFavs }) => {
                   : noImagen
               }
               alt="Card image cap"
+              style={{ width: "100%", height: "200px" }}
             />
             {auth.cve_tipo_usuario === 1 && (
               <div

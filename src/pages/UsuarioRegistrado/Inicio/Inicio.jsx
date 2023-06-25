@@ -1,7 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { SearchBar, SitioCard } from "./components";
-import { Container, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import {
+  Container,
+  Input,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Row,
+} from "reactstrap";
 import Select from "react-select";
 import ReactStars from "react-rating-stars-component";
 import { TipoSitio } from "./components";
@@ -33,19 +40,19 @@ const TIPO_SITIOS = [
     nombre: "Hoteles",
     imagen: require("../../../assets/Sitios/Hotel.png"),
     ruta: "",
-    cveTipoSitio: 4,
+    cveTipoSitio: 5,
   },
   {
     nombre: "Restaurantes",
     imagen: require("../../../assets/Sitios/Restaurante.png"),
     ruta: "",
-    cveTipoSitio: 5,
+    cveTipoSitio: 6,
   },
   {
     nombre: "Parques",
     imagen: require("../../../assets/Sitios/Parque.png"),
     ruta: "",
-    cveTipoSitio: 6,
+    cveTipoSitio: 4,
   },
 ];
 
@@ -118,9 +125,12 @@ const Inicio = () => {
   const [sitiosRecomendados, setSitiosRecomendados] = useState([]);
   const [sitiosMostrar, setSitiosMostar] = useState("todos");
   const [modalFiltro, setModalFiltro] = useState(false);
+  const [buscar, setBuscar] = useState("");
 
   const [state, setState] = useState(false);
   const [etiquetasHotel, setEtiquetasHotel] = useState([null]);
+  const [etiquetasRest, setEtiquetasRest] = useState([]);
+
   const [delegacion, setDelegacion] = useState({
     value: 0,
     label: "Todas las delegacions",
@@ -146,7 +156,7 @@ const Inicio = () => {
           );
           setSitiosFiltrados(filter);
           setListaSitios(response);
-          console.log(filter);
+          console.log("Primer UseEffect", filter);
         })
         .then(() => {
           if (auth?.correo_usuario) {
@@ -183,6 +193,14 @@ const Inicio = () => {
     setRecomendadosLoading(false);
   };
 
+  // useEffect(()=>{
+  //   if(buscar){
+  //     console.log("buscar con algo")
+  //   }else{
+  //     console.log("buscar sin nada")
+  //   }
+  // },[buscar])
+
   const funcionFiltro = async () => {
     if (state == false) {
       setState(true);
@@ -199,56 +217,73 @@ const Inicio = () => {
   };
 
   useEffect(() => {
-    setSitiosFiltrados(
-      sitiosMostrar === "todos" ? listaSitios : sitiosRecomendados
-    );
-  }, [sitiosMostrar]);
-
-  /*useEffect(() => {
-    setSitiosFiltrados(
-      listaSitios.filter((sitio) => sitio.delegacion === delegacion.label)
-    );
-  }, [delegacion]);*/
+    console.log("Sitios Filtrados", sitiosFiltrados);
+  }, [sitiosFiltrados]);
 
   useEffect(() => {
-    const filter = listaSitios.filter(
-      (sitio) => sitio.cve_tipo_sitio === sitioClave
-    );
-    console.log("filter: ", filter, "delegacion: ", delegacion);
-    let filterDelegacion = [];
-    if (delegacion.value == 0) {
-      filterDelegacion = filter;
-    } else {
-      filterDelegacion = filter.filter(
-        (sitio) => sitio.delegacion === delegacion.label
-      );
-    }
-    console.log("filter delegacion: ", filterDelegacion);
-    //setSitiosFiltrados(filterDelegacion);
-    console.log("filtar por: ", filtrarpor);
-    if (filtrarpor != null) {
-      if (filtrarpor.value == 5) {
-        console.log("otra vez 1: ", menorAMayor(filterDelegacion));
-      }
-      if (filtrarpor.value == 4) {
-        console.log("otra vez 2: ", mayorAMenor(filterDelegacion));
-      }
-      if (filtrarpor.value == 1) {
-        console.log("otra vez 2: ", mejorCalificados(filterDelegacion));
-      }
-    }
-    setSitiosFiltrados(filterDelegacion); //// Este si estaba
+    const sitios = sitiosMostrar === "todos" ? listaSitios : sitiosRecomendados;
 
-    console.log("calificacion es: ", calificacion);
-    if (calificacion != null) {
-      //setSitiosFiltrados(porCalificacion(calificacion, filterDelegacion));
-      porCalificacion(calificacion, filterDelegacion);
-      //console.log("aver: ", porCalificacion(calificacion, filterDelegacion));
+    if (sitios.length > 0) {
+      const filter = sitios.filter(
+        (sitio) => sitio.cve_tipo_sitio === sitioClave
+      );
+      console.log("filter: ", filter, "delegacion: ", delegacion);
+      let filterDelegacion = [];
+      if (delegacion.value == 0) {
+        filterDelegacion = filter;
+      } else {
+        filterDelegacion = filter.filter(
+          (sitio) => sitio.delegacion === delegacion.label
+        );
+      }
+      console.log("filter delegacion: ", filterDelegacion);
+      //setSitiosFiltrados(filterDelegacion);
+      console.log("filtar por: ", filtrarpor);
+      if (filtrarpor != null) {
+        if (filtrarpor.value == 5) {
+          console.log("otra vez 1: ", menorAMayor(filterDelegacion));
+        }
+        if (filtrarpor.value == 4) {
+          console.log("otra vez 2: ", mayorAMenor(filterDelegacion));
+        }
+        if (filtrarpor.value == 1) {
+          console.log("otra vez 2: ", mejorCalificados(filterDelegacion));
+        }
+      }
+      setSitiosFiltrados(filterDelegacion); //// Este si estaba
+
+      console.log("calificacion es: ", calificacion);
+      if (calificacion != null) {
+        //setSitiosFiltrados(porCalificacion(calificacion, filterDelegacion));
+        porCalificacion(calificacion, filterDelegacion);
+        //console.log("aver: ", porCalificacion(calificacion, filterDelegacion));
+      }
+
+      filtrarBusqueda(filterDelegacion);
     }
 
     //setSitiosFiltrados(filterDelegacion);   //// Este tambien mas o menos estaba
     //setSitiosFiltrados(sitiosFiltrados);
-  }, [delegacion, filtrarpor, etiquetasHotel, sitioClave, calificacion]);
+  }, [
+    delegacion,
+    filtrarpor,
+    etiquetasHotel,
+    sitioClave,
+    calificacion,
+    buscar,
+    sitiosMostrar,
+  ]);
+
+  const filtrarBusqueda = (datos) => {
+    if (buscar) {
+      let filtrados = datos.filter((dato) =>
+        dato.nombre_sitio.toUpperCase().includes(buscar.toUpperCase())
+      );
+      setSitiosFiltrados(filtrados);
+    } else {
+      setSitiosFiltrados(datos);
+    }
+  };
 
   const menorAMayor = async (filterDelegacion) => {
     console.log("caso 1");
@@ -343,76 +378,11 @@ const Inicio = () => {
     }
   };
 
-  const ModalFiltrado = ({ toggle, isOpen }) => {
-    return (
-      <Modal size="lg" isOpen={isOpen} toggle={toggle}>
-        <ModalBody>
-          <div className="filtro">
-            <div className="row">
-              Seleccione una Calificacion
-              <ReactStars
-                count={5}
-                value={calificacion}
-                size={20}
-                activeColor="#ffd700"
-                onChange={ratingChanged}
-                isHalf={true}
-                emptyIcon={<i className="far fa-star"></i>}
-                halfIcon={<i className="fa fa-star-half-alt"></i>}
-                fullIcon={<i className="fa fa-star"></i>}
-              />
-            </div>
-            {sitioClave == 1 && (
-              <Select
-                id="inputEtiquetas"
-                options={ETIQUETAS_HOTEL}
-                value={etiquetasHotel}
-                defaultValue={etiquetasHotel}
-                onChange={setEtiquetasHotel}
-                placeholder="Seleccione una o mas etiquetas..."
-                noOptionsMessage={() => "Etiqueta no encontrada"}
-                isMulti
-              />
-            )}
-            {sitioClave == 6 && (
-              <Select
-                id="inputEtiquetas"
-                options={ETIQUETAS_HOTEL}
-                value={etiquetasHotel}
-                defaultValue={etiquetasHotel}
-                onChange={setEtiquetasHotel}
-                placeholder="Seleccione una o mas etiquetas..."
-                noOptionsMessage={() => "Etiqueta no encontrada"}
-                isMulti
-              />
-            )}
-            <Select
-              id="inputDelegacionEditar"
-              options={DELEGACIONES}
-              value={delegacion}
-              defaultValue={delegacion}
-              onChange={setDelegacion}
-              placeholder="Delegacion"
-            />
-            <Select
-              id="inputEtiquetas"
-              options={FILTRAR_POR}
-              value={filtrarpor}
-              defaultValue={filtrarpor}
-              onChange={setFiltrarPor}
-              placeholder="Ordenar"
-            />
-            <span
-              className="btn primario btn-primary btn-block"
-              onClick={(e) => limpiar()}
-            >
-              Limpiar filtros
-            </span>
-          </div>
-        </ModalBody>
-      </Modal>
-    );
-  };
+  // const ModalFiltrado = ({ toggle, isOpen }) => {
+  //   return (
+
+  //   );
+  // };
 
   return (
     <Container fluid style={{ minHeight: "100vh" }}>
@@ -420,7 +390,73 @@ const Inicio = () => {
         className="row justify-content-center"
         style={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
       >
-        <ModalFiltrado isOpen={modalFiltro} toggle={toggle} />
+        {/* <ModalFiltrado isOpen={modalFiltro} toggle={toggle} /> */}
+        <Modal size="lg" isOpen={modalFiltro} toggle={toggle}>
+          <ModalBody>
+            <div className="filtro">
+              <div className="row">
+                Seleccione una Calificacion
+                <ReactStars
+                  count={5}
+                  value={calificacion}
+                  size={20}
+                  activeColor="#ffd700"
+                  onChange={ratingChanged}
+                  isHalf={true}
+                  emptyIcon={<i className="far fa-star"></i>}
+                  halfIcon={<i className="fa fa-star-half-alt"></i>}
+                  fullIcon={<i className="fa fa-star"></i>}
+                />
+              </div>
+              {sitioClave === 5 && (
+                <Select
+                  id="inputEtiquetas"
+                  options={ETIQUETAS_HOTEL}
+                  value={etiquetasHotel}
+                  defaultValue={etiquetasHotel}
+                  onChange={setEtiquetasHotel}
+                  placeholder="Seleccione una o mas etiquetas..."
+                  noOptionsMessage={() => "Etiqueta no encontrada"}
+                  isMulti
+                />
+              )}
+              {sitioClave === 6 && (
+                <Select
+                  id="inputEtiquetas"
+                  options={ETIQUETAS_RESTAURANTE}
+                  value={etiquetasRest}
+                  defaultValue={etiquetasRest}
+                  onChange={setEtiquetasRest}
+                  placeholder="Seleccione una o mas etiquetas..."
+                  noOptionsMessage={() => "Etiqueta no encontrada"}
+                  isMulti
+                />
+              )}
+              <Select
+                id="inputDelegacionEditar"
+                options={DELEGACIONES}
+                value={delegacion}
+                defaultValue={delegacion}
+                onChange={setDelegacion}
+                placeholder="Delegacion"
+              />
+              <Select
+                id="inputEtiquetas"
+                options={FILTRAR_POR}
+                value={filtrarpor}
+                defaultValue={filtrarpor}
+                onChange={setFiltrarPor}
+                placeholder="Ordenar"
+              />
+              <span
+                className="btn primario btn-primary btn-block"
+                onClick={(e) => limpiar()}
+              >
+                Limpiar filtros
+              </span>
+            </div>
+          </ModalBody>
+        </Modal>
         <div className="column" style={{ width: "80%" }}>
           <div className="row">
             <div className={`col-${auth.cve_tipo_usuario === 1 ? "9" : "12"}`}>
@@ -485,6 +521,11 @@ const Inicio = () => {
                 </div>
               )}
             </div>
+            <Input
+              onChange={(e) => setBuscar(e.target.value)}
+              style={{ width: "100%", marginTop: "10px" }}
+              placeholder="Ingresa el nombre de un sitio..."
+            />
           </div>
           <br />
         </div>
