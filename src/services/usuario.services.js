@@ -121,6 +121,26 @@ const editCuenta = async (form) => {
     });
 };
 
+const mostrarUsuarios = async () => {
+  return axios
+    .get(API + `/mostrar_usuarios`, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const getUsuarioID = async (id) => {
+  return axios
+    .get(API + `/mostrar_usuario/${id}`, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
 const usuariosService = {
   favoritos,
   getFavoritos,
@@ -131,6 +151,8 @@ const usuariosService = {
   removeResena,
   getRecomendaciones,
   editCuenta,
+  mostrarUsuarios,
+  getUsuarioID,
 };
 
 export default usuariosService;

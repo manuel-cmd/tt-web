@@ -57,21 +57,24 @@ const TIPO_SITIOS = [
 ];
 
 const ETIQUETAS_RESTAURANTE = [
-  { value: 6, label: "Antropología" },
-  { value: 5, label: "Arqueología" },
-  { value: 2, label: "Arte" },
-  { value: 12, label: "Buffet" },
-  { value: 1, label: "Ciencia y tecnología" },
-  { value: 11, label: "Cortes" },
-  { value: 4, label: "Especializado" },
-  { value: 8, label: "Hamburguesas" },
-  { value: 3, label: "Historia" },
-  { value: 10, label: "Mariscos" },
-  { value: 13, label: "Música en vivo" },
-  { value: 9, label: "Pizzas" },
-  { value: 15, label: "Restaurante/Bar" },
-  { value: 14, label: "Románticos" },
-  { value: 7, label: "Tacos" },
+  { label: "Buffet", value: 12 },
+  { label: "Cortes", value: 11 },
+  { label: "Hamburguesas", value: 8 },
+  { label: "Mariscos", value: 10 },
+  { label: "Música en vivo", value: 13 },
+  { label: "Pizzas", value: 9 },
+  { label: "Restaurante/Bar", value: 15 },
+  { label: "Románticos", value: 14 },
+  { label: "Tacos", value: 7 },
+];
+
+const ETIQUETAS_MUSEO = [
+  { label: "Antropología", value: 6 },
+  { label: "Arqueología", value: 5 },
+  { label: "Arte", value: 2 },
+  { label: "Ciencia y tecnología", value: 1 },
+  { label: "Especializado", value: 4 },
+  { label: "Historia", value: 3 },
 ];
 
 const ETIQUETAS_HOTEL = [
@@ -128,8 +131,9 @@ const Inicio = () => {
   const [buscar, setBuscar] = useState("");
 
   const [state, setState] = useState(false);
-  const [etiquetasHotel, setEtiquetasHotel] = useState([null]);
+  const [etiquetasHotel, setEtiquetasHotel] = useState([]);
   const [etiquetasRest, setEtiquetasRest] = useState([]);
+  const [etiquetasMuseo, setEtiquetasMuseo] = useState([]);
 
   const [delegacion, setDelegacion] = useState({
     value: 0,
@@ -218,6 +222,9 @@ const Inicio = () => {
 
   useEffect(() => {
     console.log("Sitios Filtrados", sitiosFiltrados);
+    /*setEtiquetasHotel([]);
+    setEtiquetasMuseo([]);
+    setEtiquetasRest([]);*/
   }, [sitiosFiltrados]);
 
   useEffect(() => {
@@ -227,6 +234,12 @@ const Inicio = () => {
       const filter = sitios.filter(
         (sitio) => sitio.cve_tipo_sitio === sitioClave
       );
+      /*if (sitioClave == 2 || sitioClave == 3 || sitioClave == 4){
+        setEtiquetasHotel([]);
+    setEtiquetasMuseo([]);
+    setEtiquetasRest([]);
+      }*/
+
       console.log("filter: ", filter, "delegacion: ", delegacion);
       let filterDelegacion = [];
       if (delegacion.value == 0) {
@@ -258,8 +271,19 @@ const Inicio = () => {
         porCalificacion(calificacion, filterDelegacion);
         //console.log("aver: ", porCalificacion(calificacion, filterDelegacion));
       }
+      if (etiquetasRest.length > 0) {
+        filterDelegacion = filtrarEtiquetasRestaurante(filterDelegacion);
+      }
+      if (etiquetasHotel.length > 0) {
+        filterDelegacion = filtrarEtiquetasHotel(filterDelegacion);
+      }
+      if (etiquetasMuseo.length > 0) {
+        filterDelegacion = filtrarEtiquetasMuseo(filterDelegacion);
+      }
 
+      console.log("el filter delegacion ahora: ", filterDelegacion);
       filtrarBusqueda(filterDelegacion);
+      //setSitiosFiltrados(filterDelegacion);
     }
 
     //setSitiosFiltrados(filterDelegacion);   //// Este tambien mas o menos estaba
@@ -268,6 +292,8 @@ const Inicio = () => {
     delegacion,
     filtrarpor,
     etiquetasHotel,
+    etiquetasRest,
+    etiquetasMuseo,
     sitioClave,
     calificacion,
     buscar,
@@ -275,6 +301,7 @@ const Inicio = () => {
   ]);
 
   const filtrarBusqueda = (datos) => {
+    console.log("Sigue la busqueda", datos);
     if (buscar) {
       let filtrados = datos.filter((dato) =>
         dato.nombre_sitio.toUpperCase().includes(buscar.toUpperCase())
@@ -282,6 +309,91 @@ const Inicio = () => {
       setSitiosFiltrados(filtrados);
     } else {
       setSitiosFiltrados(datos);
+    }
+  };
+
+  const filtrarEtiquetasRestaurante = (datos) => {
+    console.log("etiquetas");
+    console.log("etiquetas res: ", etiquetasRest);
+    console.log("los datos son: ", datos);
+    if (etiquetasRest.length > 0) {
+      let filtrados = [];
+      etiquetasRest.map((etiqueta) => {
+        datos.map((dato) => {
+          for (var i = 0; i < dato.etiquetas.length; i++) {
+            if (dato.etiquetas[i].label == etiqueta.label) {
+              filtrados.push(dato);
+              console.log("se encuentra objeto!.");
+              break;
+            }
+          }
+        });
+      });
+
+      console.log("los filtrados son: ", filtrados);
+      setSitiosFiltrados(filtrados);
+
+      return filtrados;
+    } else {
+      console.log("caso 2");
+      setSitiosFiltrados(datos);
+      return datos;
+    }
+  };
+
+  const filtrarEtiquetasHotel = (datos) => {
+    console.log("etiquetas");
+    console.log("etiquetas res: ", etiquetasRest);
+    console.log("los datos son: ", datos);
+    if (etiquetasHotel.length > 0) {
+      let filtrados = [];
+      etiquetasHotel.map((etiqueta) => {
+        datos.map((dato) => {
+          for (var i = 0; i < dato.etiquetas.length; i++) {
+            if (dato.etiquetas[i].label == etiqueta.label) {
+              filtrados.push(dato);
+              console.log("se encuentra objeto!.");
+              break;
+            }
+          }
+        });
+      });
+
+      console.log("los filtrados son: ", filtrados);
+      setSitiosFiltrados(filtrados);
+      return filtrados;
+    } else {
+      console.log("caso 2");
+      setSitiosFiltrados(datos);
+      return datos;
+    }
+  };
+
+  const filtrarEtiquetasMuseo = (datos) => {
+    console.log("etiquetas");
+    console.log("etiquetas res: ", etiquetasRest);
+    console.log("los datos son: ", datos);
+    if (etiquetasMuseo.length > 0) {
+      let filtrados = [];
+      etiquetasMuseo.map((etiqueta) => {
+        datos.map((dato) => {
+          for (var i = 0; i < dato.etiquetas.length; i++) {
+            if (dato.etiquetas[i].label == etiqueta.label) {
+              filtrados.push(dato);
+              console.log("se encuentra objeto!.");
+              break;
+            }
+          }
+        });
+      });
+
+      console.log("los filtrados son: ", filtrados);
+      setSitiosFiltrados(filtrados);
+      return filtrados;
+    } else {
+      console.log("caso 2");
+      setSitiosFiltrados(datos);
+      return datos;
     }
   };
 
@@ -359,6 +471,9 @@ const Inicio = () => {
     setSitiosFiltrados(listaSitios);
     setDelegacion({ value: 0, label: "Todas las delegacions" });
     setFiltrarPor({ value: 0, label: "Por defecto" });
+    setEtiquetasHotel([]);
+    setEtiquetasMuseo([]);
+    setEtiquetasRest([]);
   };
 
   const ListaSitios = () => {
@@ -400,6 +515,7 @@ const Inicio = () => {
                   count={5}
                   value={calificacion}
                   size={20}
+                  edit={false}
                   activeColor="#ffd700"
                   onChange={ratingChanged}
                   isHalf={true}
@@ -408,6 +524,18 @@ const Inicio = () => {
                   fullIcon={<i className="fa fa-star"></i>}
                 />
               </div>
+              {sitioClave === 1 && (
+                <Select
+                  id="inputEtiquetas"
+                  options={ETIQUETAS_MUSEO}
+                  value={etiquetasMuseo}
+                  defaultValue={etiquetasMuseo}
+                  onChange={setEtiquetasMuseo}
+                  placeholder="Seleccione una o mas etiquetas..."
+                  noOptionsMessage={() => "Etiqueta no encontrada"}
+                  isMulti
+                />
+              )}
               {sitioClave === 5 && (
                 <Select
                   id="inputEtiquetas"
@@ -459,7 +587,14 @@ const Inicio = () => {
         </Modal>
         <div className="column" style={{ width: "80%" }}>
           <div className="row">
-            <div className={`col-${auth.cve_tipo_usuario === 1 ? "9" : "12"}`}>
+            <div
+              className={`col-${
+                auth.cve_tipo_usuario === 1 ||
+                auth.cve_tipo_usuario === undefined
+                  ? "9"
+                  : "12"
+              }`}
+            >
               <div className="row">
                 {TIPO_SITIOS.map((sitio) => (
                   <TipoSitio
@@ -502,6 +637,11 @@ const Inicio = () => {
                       </a>
                     )}
                   </div>
+                </div>
+              )}
+              {(auth.cve_tipo_usuario === 1 ||
+                auth.cve_tipo_usuario === undefined) && (
+                <div className="row d-flex flex-column">
                   <div className="col p-1 mb-1">
                     <div
                       // onClick={() => handleActivo(cve)}

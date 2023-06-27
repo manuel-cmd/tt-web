@@ -160,7 +160,7 @@ const ModalLogin = ({ isOpen, toggle }) => {
                   onChange={(e) => setUser(e.target.value)}
                   type="text"
                   class="form-control"
-                  placeholder="Juan"
+                  placeholder="Usuario"
                   id="username"
                 />
               </div>

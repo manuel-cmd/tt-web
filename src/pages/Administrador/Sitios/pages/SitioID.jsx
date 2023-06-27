@@ -16,6 +16,7 @@ import ModalResena from "../components/ModalResena";
 import Heart from "react-animated-heart";
 
 import usuariosService from "../../../../services/usuario.services";
+import noImagen from "../../../../assets/Sitios/no-imagen.jpg";
 
 const SitioID = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -127,6 +128,12 @@ const SitioID = () => {
     setClick(!isClick);
   };
 
+  const yaComentado = () => {
+    console.log("hola");
+    resenas.map((resena) => {
+      console.log("la resena es: ", resena);
+    });
+  };
   const addVisita = async (cve) => {
     try {
       setIsSending(true);
@@ -142,7 +149,7 @@ const SitioID = () => {
     } catch (error) {
       console.log(error);
     }
-
+    yaComentado();
     setIsSending(false);
   };
 
@@ -204,7 +211,19 @@ const SitioID = () => {
               <div className="col-xl-6">
                 <div className="sidebar">
                   <div className="panel panel-success">
-                    <CarruselImagenes imagenes={sitio.fotos} />
+                    {/*<CarruselImagenes imagenes={sitio.fotos} />*/}
+                    {console.log("sitioFotos: ", sitio.fotos)}
+                    {sitio.fotos.length == 0 ? (
+                      <div>
+                        <img class="card-img-top" src={noImagen}></img>
+                        {console.log("caso 1")}
+                      </div>
+                    ) : (
+                      <div>
+                        {console.log("kha")}
+                        <CarruselImagenes imagenes={sitio.foto} />
+                      </div>
+                    )}
                     {auth.correo_usuario && (
                       <>
                         {auth.tipo_usuario == "Usuario registrado" && (
@@ -234,6 +253,17 @@ const SitioID = () => {
                       </>
                     )}
                   </div>
+                  <br />
+                  <p>
+                    <strong>Etiquetas</strong>{" "}
+                    {console.log("etiquetas del sitio: ", sitio.etiquetas)}
+                    {sitio.etiquetas.map((etiqueta) => {
+                      <div>
+                        {console.log(etiqueta.nombre_etiqueta)}
+                        etiqueta.nombre_etiqueta
+                      </div>;
+                    })}
+                  </p>
                 </div>
               </div>{" "}
               <div className="col-xl-6">

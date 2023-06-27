@@ -266,8 +266,7 @@ const Resenas = () => {
         </div>
         {auth.cve_tipo_usuario === 1 && (
           <div className="mostrarSitio">
-            {
-              /*sitiosMostrar === "todos" ? (
+            {/*sitiosMostrar === "todos" ? (
               <button
                 className="btn btn-primary primario"
                 onClick={() => getRecomendaciones()}
@@ -283,15 +282,14 @@ const Resenas = () => {
                   <>Mostrar Recomendados</>
                 )}
               </button>
-            ) : (*/
+            ) : (
               <button
                 className="btn btn-primary primario"
                 onClick={() => setSitiosMostar("todos")}
               >
                 Mostrar todos
               </button>
-              /*)*/
-            }
+              /*)*/}
           </div>
         )}
       </div>

@@ -7,4 +7,6 @@ export const ROUTES = {
   HISTORIAL: "historial",
   RESENAS: "resenas",
   CONFIFURACION: "configuracion",
+  USUARIOS: "usuarios",
+  USUARIOID: "usuario",
 };

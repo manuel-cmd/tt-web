@@ -56,13 +56,29 @@ const Navbar = () => {
                       to={`/${ROUTES.SITIOS}`}
                       state={""}
                       style={{ textDecoration: "none" }}
-                      onClick={() => setCurrent(ROUTES.INICIO)}
+                      onClick={() => setCurrent(ROUTES.SITIOS)}
                     >
                       <li>
                         <a
                           class={`${current === ROUTES.SITIOS ? "active" : ""}`}
                         >
                           Sitios
+                        </a>
+                      </li>
+                    </Link>
+                    <Link
+                      to={`/${ROUTES.USUARIOS}`}
+                      state={""}
+                      style={{ textDecoration: "none" }}
+                      onClick={() => setCurrent(ROUTES.USUARIOS)}
+                    >
+                      <li>
+                        <a
+                          class={`${
+                            current === ROUTES.USUARIOS ? "active" : ""
+                          }`}
+                        >
+                          Usuarios
                         </a>
                       </li>
                     </Link>
