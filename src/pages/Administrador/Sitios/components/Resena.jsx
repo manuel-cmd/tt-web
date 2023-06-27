@@ -33,6 +33,7 @@ const Resena = ({ comentarios }) => {
                           value={comentario.calificacion}
                           size={20}
                           activeColor="#ffd700"
+                          edit={false}
                           isHalf={true}
                           emptyIcon={<i className="far fa-star"></i>}
                           halfIcon={<i className="fa fa-star-half-alt"></i>}

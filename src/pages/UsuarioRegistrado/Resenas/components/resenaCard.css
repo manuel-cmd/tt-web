@@ -4,11 +4,11 @@
 }
 
 .estrellitas2{
-    display: flex;
+    display: block;
     position: absolute;
     right: 10px;
     top: 10px;
-    width: 220px;    
+    width: 250px;    
     justify-content: space-between;
     align-content: center;
     justify-items: center;

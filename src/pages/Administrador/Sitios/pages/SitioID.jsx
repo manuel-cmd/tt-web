@@ -31,7 +31,7 @@ const SitioID = () => {
   const [visitado, setVisitado] = useState(false);
   const [resenas, setResenas] = useState([]);
   const [nuevaresenaU, setNuevaResenaU] = useState(false);
-
+  const [visto, setVisto] = useState(false);
   const { id } = useParams();
   const { auth } = useAuth();
   const { setAuth } = useAuth();
@@ -50,6 +50,7 @@ const SitioID = () => {
             setSitio(response);
             setVisitado(response.visitado);
             setResenas(response.comentarios);
+            yaComentado();
           });
         //consegirResenas();
         sitiosService.getResenas(auth.correo_usuario).then((response) => {
@@ -130,9 +131,23 @@ const SitioID = () => {
 
   const yaComentado = () => {
     console.log("hola");
+    console.log("hola2 con resenas", resenas);
+
     resenas.map((resena) => {
       console.log("la resena es: ", resena);
+      if (auth.usuario == resena.usuario) {
+        console.log(
+          "usuario: ",
+          auth.usuario,
+          " resena.usuario: ",
+          resena.usuario
+        );
+        console.log("usuaio ya comento");
+        setVisto(true);
+      }
     });
+    console.log("el estado es: ", visto);
+    console.log("hola despues");
   };
   const addVisita = async (cve) => {
     try {
@@ -145,11 +160,12 @@ const SitioID = () => {
       setSitio(response.datos_sitio);
       if (visitado == true) setVisitado(false);
       if (visitado == false) setVisitado(true);
+      yaComentado();
       toast.success(response.mensaje);
     } catch (error) {
       console.log(error);
     }
-    yaComentado();
+
     setIsSending(false);
   };
 
@@ -175,11 +191,13 @@ const SitioID = () => {
         )}
         {resenas.length > 0 && auth.tipo_usuario == "Usuario registrado" && (
           <div className="container d-flex flex-column justify-content-center align-items-center">
-            {visitado && auth.tipo_usuario == "Usuario registrado" && (
-              <>
-                <AgregarReseña />
-              </>
-            )}
+            {visitado &&
+              auth.tipo_usuario == "Usuario registrado" &&
+              visto == false && (
+                <>
+                  <AgregarReseña />
+                </>
+              )}
           </div>
         )}
         {resenas.length == 0 && nuevaresenaU != false && (

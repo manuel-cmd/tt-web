@@ -8,21 +8,24 @@ import authService from "../services/auth.services";
 import Select from "react-select";
 
 const ETIQUETAS_RESTAURANTE = [
-  { value: 6, label: "Antropología" },
-  { value: 5, label: "Arqueología" },
-  { value: 2, label: "Arte" },
-  { value: 12, label: "Buffet" },
-  { value: 1, label: "Ciencia y tecnología" },
-  { value: 11, label: "Cortes" },
-  { value: 4, label: "Especializado" },
-  { value: 8, label: "Hamburguesas" },
-  { value: 3, label: "Historia" },
-  { value: 10, label: "Mariscos" },
-  { value: 13, label: "Música en vivo" },
-  { value: 9, label: "Pizzas" },
-  { value: 15, label: "Restaurante/Bar" },
-  { value: 14, label: "Románticos" },
-  { value: 7, label: "Tacos" },
+  { label: "Buffet", value: 12 },
+  { label: "Cortes", value: 11 },
+  { label: "Hamburguesas", value: 8 },
+  { label: "Mariscos", value: 10 },
+  { label: "Música en vivo", value: 13 },
+  { label: "Pizzas", value: 9 },
+  { label: "Restaurante/Bar", value: 15 },
+  { label: "Románticos", value: 14 },
+  { label: "Tacos", value: 7 },
+];
+
+const ETIQUETAS_MUSEO = [
+  { label: "Antropología", value: 6 },
+  { label: "Arqueología", value: 5 },
+  { label: "Arte", value: 2 },
+  { label: "Ciencia y tecnología", value: 1 },
+  { label: "Especializado", value: 4 },
+  { label: "Historia", value: 3 },
 ];
 
 const ETIQUETAS_HOTEL = [
@@ -53,6 +56,10 @@ const ModalLogin = ({ isOpen, toggle }) => {
   const [registro, setRegistro] = useState(false);
   const [etiquetasRestaurante, setEtiquetasRestaurante] = useState([]);
   const [etiquetasHotel, setEtiquetasHotel] = useState([]);
+
+  const [etiquetasRest, setEtiquetasRest] = useState([]);
+  const [etiquetasMuseo, setEtiquetasMuseo] = useState([]);
+
   const [tipo_sitio, setTipo_sitio] = useState([]);
   const { setAuth } = useAuth();
   const navigate = useNavigate();
@@ -191,6 +198,24 @@ const ModalLogin = ({ isOpen, toggle }) => {
                   {console.log("tipo sitio: ", tipo_sitio)}
                 </div>
               </div>
+              {tipo_sitio[0] != null && (
+                <div class="form-group last mb-3">
+                  {sitioExists(1) && (
+                    <div class="form-group ">
+                      Seleccione las etiquetas de su preferencia:
+                      <Select
+                        id="inputEtiquetas"
+                        options={ETIQUETAS_MUSEO}
+                        value={etiquetasRestaurante}
+                        defaultValue={etiquetasRestaurante}
+                        onChange={setEtiquetasRestaurante}
+                        placeholder="Seleccione una o mas etiquetas..."
+                        isMulti
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
               {tipo_sitio[0] != null && (
                 <div class="form-group last mb-3">
                   {sitioExists(5) && (
